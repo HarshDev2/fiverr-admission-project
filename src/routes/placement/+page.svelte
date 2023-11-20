@@ -79,7 +79,7 @@
 		</Modal>
 
 		{#if infoOpen}
-			<div class="flex flex-col">
+			
 				<div class="flex flex-row">
 					<div>
 						<Table divClass="mt-4" hoverable={true}>
@@ -97,37 +97,24 @@
 									<TableBodyCell>PROGRAMME</TableBodyCell>
 									<TableBodyCell>General Arts</TableBodyCell>
 								</TableBodyRow>
-								<TableBodyRow>
-									<TableBodyCell>CLASS</TableBodyCell>
-									<TableBodyCell>General Arts (Geography)</TableBodyCell>
-								</TableBodyRow>
+								
 								<TableBodyRow>
 									<TableBodyCell>Gender</TableBodyCell>
 									<TableBodyCell>Male</TableBodyCell>
 								</TableBodyRow>
-								<TableBodyRow>
-									<TableBodyCell>Residence</TableBodyCell>
-									<TableBodyCell>Boarding</TableBodyCell>
-								</TableBodyRow>
+								
 								<TableBodyRow>
 									<TableBodyCell>Aggretate</TableBodyCell>
 									<TableBodyCell>12</TableBodyCell>
 								</TableBodyRow>
-								<TableBodyRow>
-									<TableBodyCell>Row score</TableBodyCell>
-									<TableBodyCell>780</TableBodyCell>
-								</TableBodyRow>
-								<TableBodyRow>
-									<TableBodyCell>Admission No.</TableBodyCell>
-									<TableBodyCell>PSHS/23/0001</TableBodyCell>
-								</TableBodyRow>
+								
+								
 							</TableBody>
 						</Table>
 					</div>
-					<img class="max-h-[20vh]" src={'/student.png'} alt="Student's Picture" />
 				</div>
 				<Button class="w-fit mt-2 ml-2" color="green">Confirm</Button>
-			</div>
+			
 		{/if}
 	</div>
 </div>
