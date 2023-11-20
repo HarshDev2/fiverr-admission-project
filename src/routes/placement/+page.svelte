@@ -102,6 +102,11 @@
 									<TableBodyCell>Gender</TableBodyCell>
 									<TableBodyCell>Male</TableBodyCell>
 								</TableBodyRow>
+
+								<TableBodyRow>
+									<TableBodyCell>Residence</TableBodyCell>
+									<TableBodyCell>Boarding</TableBodyCell>
+								</TableBodyRow>
 								
 								<TableBodyRow>
 									<TableBodyCell>Aggretate</TableBodyCell>
