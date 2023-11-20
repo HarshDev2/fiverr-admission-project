@@ -8,14 +8,14 @@
 </script>
 
 <div
-	class="bg-dark-background dark text-white flex flex-col min-h-[100vh] items-center justify-center"
+	class="bg-background text-white flex flex-col min-h-[100vh] items-center justify-center"
 >
 	<div
-		class="flex flex-col min-h-[50vh] lg:min-h-[50vh] items-center p-8 rounded-md bg-dark-muted-background"
+		class="flex flex-col min-h-[50vh] lg:min-h-[50vh] items-center p-8 rounded-md bg-muted-background"
 	>
 		<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">PEKI SENIOR HIGH SCHOOL</h1>
 		<img class="max-h-[20vh]" src={'/favicon.png'} alt="School Logo" />
-		<h1 class="text-xl mt-6 font-bold text-center">Student's Login</h1>
+		<h1 class="text-xl text-black mt-6 font-bold text-center">Student's Login</h1>
 		<div class="w-4/5 mt-4 flex flex-col">
             <span class="text-[15px] my-1 text-white">Index Number</span>
 			<Input

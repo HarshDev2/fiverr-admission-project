@@ -20,7 +20,7 @@
 	});
 </script>
 
-<div class="{$theme == "dark" ? "dark bg-dark-background text-white" : "bg-[#fffefe]"} min-h-screen flex flex-col">
+<div class="bg-[#f9f8fa] min-h-screen flex flex-col">
 	<slot />
 </div>
 

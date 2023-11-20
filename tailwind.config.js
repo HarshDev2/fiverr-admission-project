@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-	darkMode: 'class',
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
 		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
@@ -21,6 +20,9 @@ export default {
 					800: '#CC4522',
 					900: '#A5371B'
 				},
+
+				'background': '#f9f8fa',
+				'muted-background': '#fffefe',
 
 				'dark-background': "#111827",
 				'dark-muted-background': "#1e2936",

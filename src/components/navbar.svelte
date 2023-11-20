@@ -19,26 +19,10 @@
 	import { theme } from '../store';
 </script>
 
-<div class="h-[72px] bg-slate-200/40 dark:bg-dark-muted-background border-b border-gray-200 dark:border-b-gray-700 flex flex-row px-12 gap-4 justify-end items-center">
+<div class="h-[72px] bg-muted-background border-b border-gray-200 dark:border-b-gray-700 flex flex-row px-12 gap-4 justify-end items-center">
     <div class="flex flex-row justify-end">
         <Search color="green" class="!w-fit" placeholder="Search..." size="md"/>
     </div>
-
-	<button
-		class="fill-black hover:bg-gray-400/20 dark:hover:bg-gray-700 rounded-lg text-xl p-2"
-		on:click={() => {
-			theme.update((theme) => {
-				if (theme === 'dark') return 'light';
-				else return 'dark';
-			});
-		}}
-	>
-		{#if $theme === 'dark'}
-			<Moon />
-		{:else}
-			<Sun />
-		{/if}
-	</button>
 
 	<Avatar
 		id="user-drop"

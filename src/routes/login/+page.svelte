@@ -9,7 +9,7 @@
 
 <div class="flex min-h-screen justify-center items-center">
 	<form class="flex flex-col space-y-6 bg-slate-200/40 dark:bg-gray-800 rounded-md p-6">
-		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in</h3>
+		<h1 class="mb-4 text-2xl font-medium text-gray-900 dark:text-white">Sign in</h1>
 		<Label class="space-y-2">
 			<span>Email</span>
 			<Input bind:value={email} color={'green'} type="email" name="email" placeholder="name@company.com" required />
