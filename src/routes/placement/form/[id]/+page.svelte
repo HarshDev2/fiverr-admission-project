@@ -3,7 +3,7 @@
 		Button,
 		Input,
 		Modal,
-        Select,
+		Select,
 		Alert,
 		Table,
 		TableBody,
@@ -38,13 +38,13 @@
 		window.open(response.data.checkoutUrl, '_blank');
 	}
 
-    let formData = {
-        haveMedicalCondition: false,
-    }
+	let formData = {
+		haveMedicalCondition: false
+	};
 
-    $: {
-        console.log(formData)
-    }
+	$: {
+		console.log(formData);
+	}
 </script>
 
 <div class="bg-background text-white flex flex-col min-h-[100vh] py-4 items-center justify-center">
@@ -87,138 +87,193 @@
 			<Label class="space-y-2 flex flex-col gap-2">
 				Do you have an medical condition?
 				<Select
-                    defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-                    items={[
-                        { value: 'yes', name: 'Yes' },
-                        { value: 'no', name: 'No' }
-                    ]}
-                    bind:value={formData.haveMedicalCondition}
-                />
+					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+					items={[
+						{ value: 'yes', name: 'Yes' },
+						{ value: 'no', name: 'No' }
+					]}
+					bind:value={formData.haveMedicalCondition}
+				/>
 			</Label>
 
-            <Label class="space-y-2 flex flex-col gap-2">
-                Admission Date
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="date" name="admissionDate" />
-            </Label>
-        
-            <!-- Admission Number -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Admission Number
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="admissionNumber" />
-            </Label>
-        
-            <!-- House (Hostel) -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                House (Hostel)
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="houseHostel" />
-            </Label>
-        
-            <!-- NHIS No. -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                NHIS No.
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="nhisNumber" />
-            </Label>
-        
-            <!-- Class -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Class
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="class" />
-            </Label>
+			<Label class="space-y-2 flex flex-col gap-2">
+				Admission Date
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="date"
+					name="admissionDate"
+				/>
+			</Label>
 
-            
-            <!-- Email -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Email
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="email" name="email" />
-            </Label>
+			<!-- Admission Number -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Admission Number
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="admissionNumber"
+				/>
+			</Label>
 
-            <!-- Number -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Number
-                <Input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="number" name="number" bind:value={number} />
-            </Label>
-            
-            <!-- Present Address -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Present Address
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="presentAddress" />
-            </Label>
-        
-            <!-- Nationality -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Nationality
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="nationality" />
-            </Label>
-        
-            <!-- Home Town -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Home Town
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="homeTown" />
-            </Label>
-        
-            <!-- Religion -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Religion
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="religion" />
-            </Label>
-        
-            <!-- Previous JHS -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Previous JHS
-                <input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="previousJHS" />
-            </Label>
-        
-            <!-- Public/Private -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                School Type
-                <Select
-                    defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-                    items={[
-                        { value: 'public', name: 'Public' },
-                        { value: 'private', name: 'Private' },
-                    ]}
-                />
-            </Label>
-        
-            <!-- BECE Year -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                BECE Year
-                <Input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" type="text" name="beceYear" />
-            </Label>
+			<!-- House (Hostel) -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				House (Hostel)
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="houseHostel"
+				/>
+			</Label>
 
-            <!-- Guardian's Name -->
-            <Label class="space-y-2 flex flex-col gap-2">
-                Guardian's Name
-                <Input class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" name="guardianName" />
-            </Label>
+			<!-- NHIS No. -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				NHIS No.
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="nhisNumber"
+				/>
+			</Label>
 
-            <!-- Relation -->
+			<!-- Class -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Class
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="class"
+				/>
+			</Label>
 
-            <Label class="space-y-2 flex flex-col gap-2">
-                Relation
-                <Select
-                    defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-                    items={[
-                        { value: 'father', name: 'Father' },
-                        { value: 'mother', name: 'Mother' },
-                        { value: 'other', name: 'Other' }
-                    ]}
-                />
-            </Label>
+			<!-- Present Address -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Present Address
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="presentAddress"
+				/>
+			</Label>
 
-            <!-- Occupation -->
+			<!-- Nationality -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Nationality
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="nationality"
+				/>
+			</Label>
 
-            <Label class="space-y-2 flex flex-col gap-2">
-                Occupation
-                <Select
-                    defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-                    items={[
-                        { value: 'farmer', name: 'Farmer' },
-                        { value: 'teacher', name: 'Teacher' },
-                        { value: 'other', name: 'Other' }
-                    ]}
-                />
-            </Label>
+			<!-- Home Town -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Home Town
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="homeTown"
+				/>
+			</Label>
+
+			<!-- Religion -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Religion
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="religion"
+				/>
+			</Label>
+
+			<!-- Previous JHS -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Previous JHS
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="previousJHS"
+				/>
+			</Label>
+
+			<!-- Public/Private -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				School Type
+				<Select
+					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+					items={[
+						{ value: 'public', name: 'Public' },
+						{ value: 'private', name: 'Private' }
+					]}
+				/>
+			</Label>
+
+			<!-- BECE Year -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				BECE Year
+				<Input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="beceYear"
+				/>
+			</Label>
+
+			<!-- Guardian's Name -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Guardian's Name
+				<Input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					name="guardianName"
+				/>
+			</Label>
+
+			<!-- Relation -->
+
+			<Label class="space-y-2 flex flex-col gap-2">
+				Relation
+				<Select
+					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+					items={[
+						{ value: 'father', name: 'Father' },
+						{ value: 'mother', name: 'Mother' },
+						{ value: 'other', name: 'Other' }
+					]}
+				/>
+			</Label>
+
+			<!-- Occupation -->
+
+			<Label class="space-y-2 flex flex-col gap-2">
+				Occupation
+				<Select
+					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+					items={[
+						{ value: 'farmer', name: 'Farmer' },
+						{ value: 'teacher', name: 'Teacher' },
+						{ value: 'other', name: 'Other' }
+					]}
+				/>
+			</Label>
+
+			<!-- Number -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Number
+				<Input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="number"
+					name="number"
+					bind:value={number}
+				/>
+			</Label>
+
+			<!-- Email -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Email
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="email"
+					name="email"
+				/>
+			</Label>
 		</div>
 
 		<!-- <Alert color="green">

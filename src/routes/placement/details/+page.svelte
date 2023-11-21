@@ -1,0 +1,139 @@
+<script>
+	import {
+		Button,
+		Input,
+		Modal,
+		Select,
+		Alert,
+		Table,
+		TableBody,
+		TableBodyCell,
+		TableBodyRow,
+		TableHead,
+		Label,
+		TableHeadCell,
+		Checkbox,
+		Radio,
+		RadioButton
+	} from 'flowbite-svelte';
+	let number = '';
+
+	let popupOpen = false;
+	let infoOpen = true;
+
+	let color = 'green';
+
+	async function handlePayment() {
+		let request = await fetch('/api/make-payment', {
+			method: 'POST',
+			body: JSON.stringify({
+				clientReference: 'da' + Math.floor(Math.random() * 1000000)
+			})
+		});
+
+		let response = await request.json();
+
+		console.log(response);
+
+		window.open(response.data.checkoutUrl, '_blank');
+	}
+
+	let formData = {
+		haveMedicalCondition: false
+	};
+
+	$: {
+		console.log(formData);
+	}
+</script>
+
+<div class="bg-background text-white flex flex-col min-h-[100vh] py-4 items-center justify-center">
+	<div class="flex flex-col min-h-[50vh] lg:min-h-[50vh] p-8 rounded-md bg-muted-background">
+		<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">Student Details</h1>
+
+		<div class="mt-2 flex flex-col gap-4">
+			<div class="flex flex-row">
+				<div>
+					<Table divClass="mt-4" hoverable={true}>
+						<TableHead>
+							<TableHeadCell>Name</TableHeadCell>
+							<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
+						</TableHead>
+
+						<TableBody tableBodyClass="divide-y">
+							<TableBodyRow>
+								<TableBodyCell>Index Number</TableBodyCell>
+								<TableBodyCell>908978/008</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>PROGRAMME</TableBodyCell>
+								<TableBodyCell>General Arts</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Gender</TableBodyCell>
+								<TableBodyCell>Male</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Residence</TableBodyCell>
+								<TableBodyCell>Boarding</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Aggretate</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+						</TableBody>
+					</Table>
+				</div>
+				<div>
+					<img class="ml-2" src="/student.png" alt="" />
+				</div>
+			</div>
+		</div>
+
+		<!-- <Alert color="green">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="currentColor"
+				slot="icon"
+				class="shrink-0 w-4 h-4"
+				role="img"
+				aria-label="info circle solid"
+				viewBox="0 0 20 20"
+				><path
+					fill="currentColor"
+					d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+				></path></svg
+			>
+
+			Add the year you completed JHS.
+		</Alert> -->
+		<div class="mt-6 w-full flex flex-col md:flex-row gap-2">
+			<Button
+				on:click={() => {
+					if (number == '99') {
+						infoOpen = true;
+					} else {
+						popupOpen = true;
+					}
+				}}
+				class="w-3/5 whitespace-nowrap"
+				color="green">Download Admission Letter</Button
+			>
+			<Button
+				on:click={() => {
+					if (number == '99') {
+						infoOpen = true;
+					} else {
+						popupOpen = true;
+					}
+				}}
+				class="w-3/5 whitespace-nowrap"
+				color="green">Download Personal Record</Button
+			>
+		</div>
+	</div>
+</div>
