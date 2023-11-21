@@ -1,4 +1,5 @@
 <script>
+	
 	import {
 		Button,
 		Input,
@@ -14,9 +15,24 @@
 	let number = '';
 
 	let popupOpen = false;
-	let infoOpen = false;
+	let infoOpen = true;
 
 	let color = 'green';
+
+	async function handlePayment(){
+		let request = await fetch('/api/make-payment', {
+			method: 'POST',
+			body: JSON.stringify({
+				clientReference: 'da' + Math.floor(Math.random() * 1000000),
+			})
+		});
+
+		let response = await request.json();
+
+		console.log(response)
+
+		window.open(response.data.checkoutUrl, '_blank')
+	}
 </script>
 
 <div class="bg-background text-white flex flex-col min-h-[100vh] items-center justify-center">
@@ -118,7 +134,7 @@
 						</Table>
 					</div>
 				</div>
-				<Button class="w-fit mt-2 ml-2" color="green">Confirm</Button>
+				<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green">Buy Admission Voucher</Button>
 			
 		{/if}
 	</div>
