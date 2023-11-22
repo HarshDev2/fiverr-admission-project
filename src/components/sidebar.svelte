@@ -6,6 +6,10 @@
         {
             name: 'Password',
             href: '/dashboard/password'
+        },
+        {
+            name: "Actions",
+            href: "/dashboard/actions"
         }
 	];
 </script>
