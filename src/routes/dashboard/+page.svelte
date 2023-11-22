@@ -1,4 +1,6 @@
 <script>
+	import { db } from '$lib/firebase';
+	import { addDoc, collection } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -25,6 +27,8 @@
 		static male = 0;
 		static female = 1;
 	}
+
+	export let data;
 
 	let students = [
 		{
@@ -69,6 +73,20 @@
 	);
 
 	let addStudentModalOpened = false;
+	let editStudentOpened = false;
+
+	let newStudentDetails = {};
+	let editStudentDetails = {};
+
+	async function createSchoolStudent() {
+		await addDoc(collection(db, 'students'), {
+			...newStudentDetails,
+			paymentCompleted: false,
+			createdAt: Date.now()
+		});
+
+		addStudentModalOpened = false;
+	}
 </script>
 
 <div class="px-12 py-8">
@@ -84,15 +102,23 @@
 		</div>
 
 		<Modal bind:open={addStudentModalOpened} size="xs" autoclose={false} class="w-full">
-			<form class="flex flex-col space-y-6" action="#">
+			<div class="flex flex-col space-y-6" action="#">
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add User</h3>
 				<Label class="space-y-2">
 					<span>Full Name</span>
-					<Input color={'green'} type="email" name="email" placeholder="E.g. Ama Serwaa" required />
+					<Input
+						bind:value={newStudentDetails.name}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. Ama Serwaa"
+						required
+					/>
 				</Label>
 				<Label class="space-y-2">
 					<span>Gender</span>
 					<Select
+						bind:value={newStudentDetails.gender}
 						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 						items={[
 							{ value: 'male', name: 'Male' },
@@ -102,42 +128,163 @@
 					/>
 				</Label>
 
-				<Label class="space-y-2 flex flex-col gap-2">
-					Date of Birth
-					<input
-						class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-						type="date"
-					/>
-				</Label>
-
 				<Label class="space-y-2">
 					<span>Index Number</span>
 					<Input
+						bind:value={newStudentDetails.index}
 						color={'green'}
-						type="email"
-						name="email"
+						type="text"
+						name="Index Number"
 						placeholder="E.g. xxxxxxxxxx23"
 						required
 					/>
 				</Label>
 
 				<Label class="space-y-2">
-					<span>Email</span>
+					<span>Aggregate</span>
 					<Input
+						bind:value={newStudentDetails.aggregate}
 						color={'green'}
-						type="email"
-						name="email"
-						placeholder="E.g. test@gmail.com"
+						type="text"
+						name="aggregate"
+						placeholder="E.g. xx"
 						required
 					/>
 				</Label>
 
 				<Label class="space-y-2">
-					<Input color={'green'} type="text" name="phone" placeholder="E.g. 0541234567" required />
+					<span>Programme</span>
+					<Input
+						bind:value={newStudentDetails.programme}
+						color={'green'}
+						type="text"
+						name="programme"
+						placeholder="E.g. General Arts"
+						required
+					/>
 				</Label>
 
-				<Button color="green" type="submit" class="w-full1">Confirm</Button>
-			</form>
+				<Label class="space-y-2">
+					<span>Track</span>
+					<Input
+						bind:value={newStudentDetails.track}
+						color={'green'}
+						type="text"
+						name="track"
+						placeholder="E.g. Single"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Status</span>
+					<Input
+						bind:value={newStudentDetails.status}
+						color={'green'}
+						type="text"
+						name="status"
+						placeholder="E.g. Day"
+						required
+					/>
+				</Label>
+
+				<Button on:click={createSchoolStudent} color="green" type="submit" class="w-full1"
+					>Confirm</Button
+				>
+			</div>
+		</Modal>
+
+		<Modal bind:open={editStudentOpened} size="xs" autoclose={false} class="w-full">
+			<div class="flex flex-col space-y-6" action="#">
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
+				<Label class="space-y-2">
+					<span>Full Name</span>
+					<Input
+						bind:value={newStudentDetails.name}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. Ama Serwaa"
+						required
+					/>
+				</Label>
+				<Label class="space-y-2">
+					<span>Gender</span>
+					<Select
+						bind:value={newStudentDetails.gender}
+						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+						items={[
+							{ value: 'male', name: 'Male' },
+							{ value: 'female', name: 'Female' },
+							{ value: 'other', name: 'Other' }
+						]}
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Index Number</span>
+					<Input
+						bind:value={newStudentDetails.index}
+						color={'green'}
+						type="text"
+						name="Index Number"
+						placeholder="E.g. xxxxxxxxxx23"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Aggregate</span>
+					<Input
+						bind:value={newStudentDetails.aggregate}
+						color={'green'}
+						type="text"
+						name="aggregate"
+						placeholder="E.g. xx"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Programme</span>
+					<Input
+						bind:value={newStudentDetails.programme}
+						color={'green'}
+						type="text"
+						name="programme"
+						placeholder="E.g. General Arts"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Track</span>
+					<Input
+						bind:value={newStudentDetails.track}
+						color={'green'}
+						type="text"
+						name="track"
+						placeholder="E.g. Single"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Status</span>
+					<Input
+						bind:value={newStudentDetails.status}
+						color={'green'}
+						type="text"
+						name="status"
+						placeholder="E.g. Day"
+						required
+					/>
+				</Label>
+
+				<Button on:click={createSchoolStudent} color="green" type="submit" class="w-full1"
+					>Confirm</Button
+				>
+			</div>
 		</Modal>
 
 		<Table divClass="mt-4" hoverable={true}>
@@ -152,16 +299,25 @@
 			</TableHead>
 
 			<TableBody tableBodyClass="divide-y">
-				{#each students as student}
+				{#each data.students as student}
 					<TableBodyRow>
 						<TableBodyCell>{student.index}</TableBodyCell>
 						<TableBodyCell>{student.name}</TableBodyCell>
-						<TableBodyCell>{student.gender == Genders.male ? 'Male' : 'Female'}</TableBodyCell>
-						<TableBodyCell>{student.paymentStatus ? 'Completed' : 'Pending'}</TableBodyCell>
+						<TableBodyCell>{student.gender}</TableBodyCell>
+						<TableBodyCell>{student.paymentCompleted ? 'Completed' : 'Pending'}</TableBodyCell>
 						<TableBodyCell>
-							<a class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</a>
+							<button
+								on:click={() => {
+									editStudentOpened = true;
+									editStudentDetails = student;
+								}}
+
+								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
+							>
 						</TableBodyCell>
 					</TableBodyRow>
+				{:else}
+					<span class="text-center ml-4 mt-4 flex">No Students Found</span>
 				{/each}
 			</TableBody>
 		</Table>

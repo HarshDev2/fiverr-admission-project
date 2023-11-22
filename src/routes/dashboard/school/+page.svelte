@@ -5,7 +5,7 @@
 </script>
 
 <div class="px-12 py-8">
-	<div>
+	<div class="bg-white p-4 rounded-md">
 		<h1 class="text-xl font-semibold">Edit School</h1>
 
 		<div class="flex flex-row mt-4 gap-4">

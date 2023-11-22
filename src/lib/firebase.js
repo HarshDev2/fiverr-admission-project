@@ -5,14 +5,13 @@ import { getStorage } from 'firebase/storage';
 import { getMessaging } from 'firebase/messaging';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyAFdciWOnyOk-TItJW9E-jpCwpJ7vFqMCA',
-	authDomain: 'truthsager-84fa3.firebaseapp.com',
-	projectId: 'truthsager-84fa3',
-	storageBucket: 'truthsager-84fa3.appspot.com',
-	messagingSenderId: '379810349352',
-	appId: '1:379810349352:web:c15d6180755ed04436901d',
-	measurementId: 'G-D5B4GT070P'
-};
+	apiKey: "AIzaSyCL9xXhWmBG1wo6oJ2elWMNacd3cKh6pUM",
+	authDomain: "fiverr-pesco.firebaseapp.com",
+	projectId: "fiverr-pesco",
+	storageBucket: "fiverr-pesco.appspot.com",
+	messagingSenderId: "825614341525",
+	appId: "1:825614341525:web:ddc27488a15081eb66d29c"
+  };
 
 let app;
 

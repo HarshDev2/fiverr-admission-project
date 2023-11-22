@@ -2,6 +2,7 @@
 	import { theme } from '../store';
 	import { onMount } from 'svelte';
 	import Cookies from 'js-cookie';
+	import { generateRandomToken } from '$utils/generateRandomToken';
 
 	let currentTheme = 'dark';
 
@@ -18,6 +19,7 @@
 			currentTheme = newTheme;
 		});
 	});
+
 </script>
 
 <div class="bg-[#f9f8fa] min-h-screen flex flex-col">
