@@ -295,8 +295,7 @@
 									editStudentOpened = true;
 									editStudentDetails = student;
 								}}
-
-								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
+								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
 							>
 						</TableBodyCell>
 					</TableBodyRow>

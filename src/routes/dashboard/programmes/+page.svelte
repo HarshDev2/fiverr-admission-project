@@ -255,6 +255,15 @@
 						<TableBodyCell>{student.name}</TableBodyCell>
 						<TableBodyCell>{student.shortName}</TableBodyCell>
 						<TableBodyCell>{student.noOfStudents}</TableBodyCell>
+						<TableBodyCell>
+							<button
+								on:click={() => {
+									editStudentOpened = true;
+									editStudentDetails = student;
+								}}
+								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
+							>
+						</TableBodyCell>
 					</TableBodyRow>
 				{:else}
 					<span class="text-center ml-4 mt-4 flex">No Class Found</span>
