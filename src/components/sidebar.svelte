@@ -3,7 +3,10 @@
 	let links = [
         { name: 'Students', href: '/dashboard' },
 		{ name: 'School', href: '/dashboard/school' },
-        
+        {
+            name: 'Password',
+            href: '/dashboard/password'
+        }
 	];
 </script>
 

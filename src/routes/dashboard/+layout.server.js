@@ -8,10 +8,17 @@ export async function load({ cookies }){
     if(!token) throw redirect(302, '/login');
 
     let adminDoc = await getDocs(query(collection(db, "admins"), where("token", "==", token)));
+    let admin;
+    
     if (adminDoc.empty) {
         throw redirect(302, '/login');
     }
-    else return {
-        admin: adminDoc.docs[0].data()
+    else {
+        admin = adminDoc.docs[0].data();
+        admin.id = adminDoc.docs[0].id;
+        
+        return {
+            admin
+        }
     }
 }
