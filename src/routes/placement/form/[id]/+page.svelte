@@ -131,6 +131,8 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="date"
+					value={new Date().toISOString().slice(0, 10)}
+					disabled
 					name="admissionDate"
 				/>
 			</Label>
@@ -141,6 +143,8 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					disabled
+					value="PSHS/23"
 					name="admissionNumber"
 				/>
 			</Label>
@@ -148,10 +152,12 @@
 			<!-- House (Hostel) -->
 			<Label class="space-y-2 flex flex-col gap-2">
 				House (Hostel)
-				<Select
-					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-					items={housesForSelect}
-					bind:value={formData.house}
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					disabled
+					value="Boys House 1"
+					name="admissionNumber"
 				/>
 			</Label>
 
