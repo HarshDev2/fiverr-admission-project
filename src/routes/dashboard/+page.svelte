@@ -91,7 +91,26 @@
 
 <div class="px-12 py-8">
 	<div>
-		<div class="flex flex-row justify-between">
+		<h1 class="text-xl font-semibold mt-4 mb-2">Dashboard</h1>
+		<div class="flex flex-row gap-2">
+			<div class="flex flex-col grow gap-2 bg-muted-background p-4 rounded-md">
+				<span class="text-sm text-gray-400 font-semibold">All Students</span>
+				<span class="text-black text-xl font-semibold">{data.counts.totalStudents}</span>
+			</div>
+			<div class="flex flex-col grow gap-2 bg-muted-background p-4 rounded-md">
+				<span class="text-sm text-gray-400 font-semibold">Male Students</span>
+				<span class="text-black text-xl font-semibold">{data.counts.maleStudents}</span>
+			</div>
+			<div class="flex flex-col grow gap-2 bg-muted-background p-4 rounded-md">
+				<span class="text-sm text-gray-400 font-semibold">Female Students</span>
+				<span class="text-black text-xl font-semibold">{data.counts.femaleStudents}</span>
+			</div>
+			<div class="flex flex-col grow gap-2 bg-muted-background p-4 rounded-md">
+				<span class="text-sm text-gray-400 font-semibold">Other Students</span>
+				<span class="text-black text-xl font-semibold">{data.counts.otherStudents}</span>
+			</div>
+		</div>
+		<div class="flex flex-row justify-between mt-10">
 			<h1 class="text-xl font-semibold">Students List</h1>
 			<Button
 				on:click={() => {

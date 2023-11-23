@@ -10,7 +10,6 @@
 	let password: string;
 
 	async function login() {
-		console.log(email, password);
 
 		let adminDocs = await getDocs(
 			query(

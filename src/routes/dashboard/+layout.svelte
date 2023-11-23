@@ -6,8 +6,8 @@
 <div class="flex flex-row">
     <Sidebar />
 
-    <div class="flex flex-col grow">
-        <Navbar />
+    <div class="flex flex-col grow pt-4">
+        <!-- <Navbar /> -->
         <slot />
     </div>
 </div>

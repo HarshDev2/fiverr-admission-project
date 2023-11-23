@@ -8,8 +8,6 @@ export async function load() {
 	for (let i = 0; i < programmeDocs.size; i++) {
 		let programme = programmeDocs.docs[i].data();
 
-		console.log(programme);
-
 		let students = await getDocs(
 			query(collection(db, 'students'), where('programme', '==', programme.id))
 		);
@@ -17,8 +15,6 @@ export async function load() {
 		programme.noOfStudents = students.size;
 		programmes.push(programme);
 	}
-
-	console.log(programmes);
 
 	return {
 		programmes

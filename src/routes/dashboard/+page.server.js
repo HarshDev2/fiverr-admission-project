@@ -9,7 +9,29 @@ export async function load(){
         students.push(doc.data());
     });
 
+    let counts = {
+        maleStudents: 0,
+        femaleStudents: 0,
+        otherStudents: 0,
+        totalStudents: 0
+    }
+
+    counts.totalStudents = students.length;
+
+    students.forEach((student) => {
+        if(student.gender == "male"){
+            counts.maleStudents++;
+        } else if(student.gender == "female"){
+            counts.femaleStudents++;
+        } else {
+            counts.otherStudents++;
+        }
+    });
+    
+    console.log(counts);
+
     return { 
-        students
+        students,
+        counts
     }
 }

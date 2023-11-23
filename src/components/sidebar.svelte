@@ -1,5 +1,7 @@
 <script>
 	import { page } from '$app/stores';
+	import Cookies from 'js-cookie';
+
 	let links = [
 		{ name: 'Students', href: '/dashboard' },
 		{ name: 'School', href: '/dashboard/school' },
@@ -11,18 +13,18 @@
 			name: 'Actions',
 			href: '/dashboard/actions'
 		},
-        {
-            name: 'Programmes',
-            href: '/dashboard/programmes'
-        },
-        {
-            name: "Class",
-            href: "/dashboard/class"
-        },
-        {
-            name: "Houses/Bed Capacity",
-            href: "/dashboard/houses"
-        }
+		{
+			name: 'Programmes',
+			href: '/dashboard/programmes'
+		},
+		{
+			name: 'Class',
+			href: '/dashboard/class'
+		},
+		{
+			name: 'Houses/Bed Capacity',
+			href: '/dashboard/houses'
+		}
 	];
 
 	let sideBarDiv;
@@ -75,5 +77,14 @@
 				<span>{link.name}</span>
 			</a>
 		{/each}
+		<button
+			on:click={() => {
+				Cookies.remove('token');
+				location.reload();
+			}}
+			class="text-gray-400 rounded-md flex cursor-pointer px-4 py-3"
+		>
+			<span>Logout</span>
+		</button>
 	</div>
 </div>
