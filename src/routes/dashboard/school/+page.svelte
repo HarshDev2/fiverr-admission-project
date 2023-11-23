@@ -46,7 +46,7 @@
             <Label class="block mb-2">School Logo</Label>
             <Fileupload color="green" placeholder="Upload School Logo"/>
         </div>
-        <div class="mt-6">
+        <div class="mt-4">
             <Button color="green">Save</Button>
         </div>
 	</div>

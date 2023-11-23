@@ -360,7 +360,7 @@
 
 			<!-- Number -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Number*
+				Phone Number*
 				<Input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="number"
@@ -398,7 +398,7 @@
 
 			Add the year you completed JHS.
 		</Alert> -->
-		<div class="mt-6 w-full flex flex-row justify-center">
+		<div class="mt-8 w-full flex flex-row justify-center">
 			<Button
 				on:click={() => {
 					if (number == '99') {
