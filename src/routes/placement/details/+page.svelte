@@ -71,6 +71,11 @@
 							</TableBodyRow>
 
 							<TableBodyRow>
+								<TableBodyCell>Aggretate</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
 								<TableBodyCell>Programme</TableBodyCell>
 								<TableBodyCell>Arts</TableBodyCell>
 							</TableBodyRow>
@@ -101,9 +106,51 @@
 							</TableBodyRow>
 
 							<TableBodyRow>
-								<TableBodyCell>Aggretate</TableBodyCell>
+								<TableBodyCell>NHIS No</TableBodyCell>
 								<TableBodyCell>12</TableBodyCell>
 							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Number</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Email</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Present Address</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Nationality</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Home Town</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Religion</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Previous JHS</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>BECE year</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+
+							
 						</TableBody>
 					</Table>
 				</div>
