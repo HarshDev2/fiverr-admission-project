@@ -14,8 +14,12 @@
 		TableHeadCell,
 		Checkbox,
 		Radio,
-		RadioButton
+		RadioButton,
+
+		Fileupload
+
 	} from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 	let number = '';
 
 	let popupOpen = false;
@@ -45,9 +49,22 @@
 	$: {
 		console.log(formData);
 	}
+
+	export let data;
+
+	let classesForSelect = [];
+
+	data.classes.forEach((item) => {
+		classesForSelect.push({ value: item.id, name: item.name });
+	});
+
+	let housesForSelect = [];
+	data.houses.forEach((item) => {
+		housesForSelect.push({ value: item.id, name: item.name });
+	});
 </script>
 
-<div class="bg-background text-white flex flex-col min-h-[100vh] py-4 items-center justify-center">
+<div class="bg-background text-white flex flex-col min-h-[100vh] py-8 items-center justify-center">
 	<div class="flex flex-col min-h-[50vh] lg:min-h-[50vh] p-8 rounded-md bg-muted-background">
 		<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">Student Application Form</h1>
 
@@ -80,6 +97,7 @@
 				Date of Birth
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					bind:value={formData.dob}
 					type="date"
 				/>
 			</Label>
@@ -89,12 +107,19 @@
 				<Select
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
-						{ value: 'yes', name: 'Yes' },
-						{ value: 'no', name: 'No' }
+						{ value: true, name: 'Yes' },
+						{ value: false, name: 'No' }
 					]}
 					bind:value={formData.haveMedicalCondition}
 				/>
 			</Label>
+
+			{#if formData.haveMedicalCondition}
+				<Label class="space-y-2 flex flex-col gap-2">
+					Medical Condition
+					<Fileupload bind:files={formData.medicalCondition}/>
+				</Label>
+			{/if}
 
 			<Label class="space-y-2 flex flex-col gap-2">
 				Admission Date
@@ -118,10 +143,10 @@
 			<!-- House (Hostel) -->
 			<Label class="space-y-2 flex flex-col gap-2">
 				House (Hostel)
-				<input
-					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-					type="text"
-					name="houseHostel"
+				<Select
+					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+					items={housesForSelect}
+					bind:value={formData.house}
 				/>
 			</Label>
 
@@ -138,10 +163,10 @@
 			<!-- Class -->
 			<Label class="space-y-2 flex flex-col gap-2">
 				Class
-				<input
-					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-					type="text"
-					name="class"
+				<Select
+					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+					items={classesForSelect}
+					bind:value={formData.class}
 				/>
 			</Label>
 
@@ -244,13 +269,11 @@
 
 			<Label class="space-y-2 flex flex-col gap-2">
 				Occupation
-				<Select
-					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-					items={[
-						{ value: 'farmer', name: 'Farmer' },
-						{ value: 'teacher', name: 'Teacher' },
-						{ value: 'other', name: 'Other' }
-					]}
+				<Input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					name="occupation"
+					bind:value={formData.occupation}
 				/>
 			</Label>
 
@@ -261,7 +284,7 @@
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="number"
 					name="number"
-					bind:value={number}
+					bind:value={formData.phoneNumber}
 				/>
 			</Label>
 
@@ -271,6 +294,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="email"
+					bind:value={formData.email}
 					name="email"
 				/>
 			</Label>
@@ -303,7 +327,7 @@
 					}
 				}}
 				class="w-3/5"
-				color="green">Login</Button
+				color="green">Submit</Button
 			>
 		</div>
 	</div>

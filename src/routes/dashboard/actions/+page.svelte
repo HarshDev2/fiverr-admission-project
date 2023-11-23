@@ -53,6 +53,11 @@
             <Input color="green"/>
         </div>
 
+		<div class="mt-2">
+            <Label class="block mb-2">Message</Label>
+            <Input color="green"/>
+        </div>
+
         <Button class="mt-2" on:click={updatePassword} color="green">Save</Button>
     </div>
     

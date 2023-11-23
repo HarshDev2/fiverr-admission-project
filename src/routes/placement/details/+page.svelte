@@ -51,8 +51,7 @@
 	<div class="flex flex-col min-h-[50vh] lg:min-h-[50vh] p-8 rounded-md bg-muted-background">
 		<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">Student Details</h1>
 
-		<div class="mt-2 flex flex-col gap-4">
-			<div class="flex flex-row">
+		<div class="mt-2 flex flex-col-reverse md:flex-row gap-4 justify-between">
 				<div>
 					<Table divClass="mt-4" hoverable={true}>
 						<TableHead>
@@ -65,20 +64,40 @@
 								<TableBodyCell>Index Number</TableBodyCell>
 								<TableBodyCell>908978/008</TableBodyCell>
 							</TableBodyRow>
-
-							<TableBodyRow>
-								<TableBodyCell>PROGRAMME</TableBodyCell>
-								<TableBodyCell>General Arts</TableBodyCell>
-							</TableBodyRow>
-
+							
 							<TableBodyRow>
 								<TableBodyCell>Gender</TableBodyCell>
 								<TableBodyCell>Male</TableBodyCell>
 							</TableBodyRow>
 
 							<TableBodyRow>
+								<TableBodyCell>Programme</TableBodyCell>
+								<TableBodyCell>Arts</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Class</TableBodyCell>
+								<TableBodyCell>General Arts</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
 								<TableBodyCell>Residence</TableBodyCell>
 								<TableBodyCell>Boarding</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>House</TableBodyCell>
+								<TableBodyCell>Boys House 1	</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>House Capacity</TableBodyCell>
+								<TableBodyCell>44</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>House Occupancy</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
 							</TableBodyRow>
 
 							<TableBodyRow>
@@ -91,7 +110,6 @@
 				<div>
 					<img class="ml-2" src="/student.png" alt="" />
 				</div>
-			</div>
 		</div>
 
 		<!-- <Alert color="green">
@@ -111,7 +129,7 @@
 
 			Add the year you completed JHS.
 		</Alert> -->
-		<div class="mt-6 w-full flex flex-col md:flex-row gap-2">
+		<div class="mt-6 w-full flex flex-col items-center md:flex-row gap-2">
 			<Button
 				on:click={() => {
 					if (number == '99') {
@@ -133,6 +151,18 @@
 				}}
 				class="w-3/5 whitespace-nowrap"
 				color="green">Download Personal Record</Button
+			>
+
+			<Button
+				on:click={() => {
+					if (number == '99') {
+						infoOpen = true;
+					} else {
+						popupOpen = true;
+					}
+				}}
+				class="w-3/5 whitespace-nowrap"
+				color="green">Download Prospectus</Button
 			>
 		</div>
 	</div>
