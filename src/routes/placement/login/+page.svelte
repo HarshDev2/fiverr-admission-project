@@ -42,7 +42,7 @@
 		{#if !infoOpen}
 			<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">PEKI SENIOR HIGH SCHOOL</h1>
 			<img class="max-h-[20vh]" src={'/favicon.png'} alt="School Logo" />
-			<h1 class="text-xl text-black mt-6 font-bold text-center">Student's Login</h1>
+			<h1 class="text-xl text-black mt-6 font-bold text-center">Verify Now</h1>
 			<div class="w-4/5 mt-4 flex flex-col">
 				<span class="text-[15px] my-1">Serial Number</span>
 				<Input
