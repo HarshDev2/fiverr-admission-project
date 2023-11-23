@@ -92,12 +92,12 @@
 
 		<div class="mt-2 flex flex-col gap-4">
 			<Label class="space-y-2 flex flex-col gap-2">
-				Passport Size Picture
+				Passport Size Picture*
 				<Fileupload />
 			</Label>
 
 			<Label class="space-y-2 flex flex-col gap-2">
-				Date of Birth
+				Date of Birth*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					bind:value={formData.dob}
@@ -106,7 +106,7 @@
 			</Label>
 
 			<Label class="space-y-2 flex flex-col gap-2">
-				Do you have an medical condition?
+				Do you have an medical condition?*
 				<Select
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
@@ -119,13 +119,13 @@
 
 			{#if formData.haveMedicalCondition}
 				<Label class="space-y-2 flex flex-col gap-2">
-					Medical Condition
+					Medical Condition*
 					<Fileupload bind:files={formData.medicalCondition} />
 				</Label>
 			{/if}
 
 			<Label class="space-y-2 flex flex-col gap-2">
-				Admission Date
+				Admission Date*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="date"
@@ -137,7 +137,7 @@
 
 			<!-- Admission Number -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Admission Number
+				Admission Number*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -149,7 +149,7 @@
 
 			<!-- House (Hostel) -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				House (Hostel)
+				House (Hostel)*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -161,7 +161,7 @@
 
 			<!-- NHIS No. -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				NHIS No.
+				NHIS No.*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -171,7 +171,7 @@
 
 			<!-- Class -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Class
+				Class*
 				<Select
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={classesForSelect}
@@ -192,7 +192,7 @@
 
 			<!-- Present Address -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Present Address
+				Present Address*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -202,7 +202,7 @@
 
 			<!-- Nationality -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Nationality
+				Nationality*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -212,7 +212,7 @@
 
 			<!-- Home Town -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Home Town
+				Home Town*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -222,7 +222,7 @@
 
 			<!-- Religion -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Religion
+				Religion*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -232,7 +232,7 @@
 
 			<!-- Previous JHS -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Previous JHS
+				Previous JHS*
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -242,7 +242,7 @@
 
 			<!-- Public/Private -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				School Type
+				School Type*
 				<Select
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
@@ -254,7 +254,7 @@
 
 			<!-- BECE Year -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				BECE Year
+				BECE Year*
 				<Select
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
@@ -325,7 +325,7 @@
 
 			<!-- Guardian's Name -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Guardian's Name
+				Guardian's Name*
 				<Input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					name="guardianName"
@@ -335,13 +335,13 @@
 			<!-- Relation -->
 
 			<Label class="space-y-2 flex flex-col gap-2">
-				Relation
+				Relation*
 				<Select
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
 						{ value: 'father', name: 'Father' },
 						{ value: 'mother', name: 'Mother' },
-						{ value: 'other', name: 'Other' }
+						{ value: 'other', name: 'Others' }
 					]}
 				/>
 			</Label>
@@ -349,7 +349,7 @@
 			<!-- Occupation -->
 
 			<Label class="space-y-2 flex flex-col gap-2">
-				Occupation
+				Occupation*
 				<Input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
@@ -360,7 +360,7 @@
 
 			<!-- Number -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Number
+				Number*
 				<Input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="number"

@@ -39,11 +39,11 @@
             </div>
             <div>
                 <Label class="block mb-2">Help Desk Number</Label>
-                <Input color="green" placeholder="Enter the name"/>
+                <Input color="green" placeholder="Enter the number"/>
             </div>
         </div>
         <div class="flex flex-col mt-4 ">
-            <Label class="block mb-2">Help Desk Number</Label>
+            <Label class="block mb-2">School Logo</Label>
             <Fileupload color="green" placeholder="Upload School Logo"/>
         </div>
         <div class="mt-4">
