@@ -44,15 +44,20 @@
 			<img class="max-h-[20vh]" src={'/favicon.png'} alt="School Logo" />
 			<h1 class="text-xl text-black mt-6 font-bold text-center">Student's Login</h1>
 			<div class="w-4/5 mt-4 flex flex-col">
-				<span class="text-[15px] my-1">Index Number</span>
+				<span class="text-[15px] my-1">Serial Number</span>
 				<Input
 					bind:value={number}
 					color="green"
 					defaultClass="w-full"
 					placeholder="E.g. xxxxxxxxxx23"
 				/>
-				<span class="text-[14px] text-center mt-1 text-red-600 ">Add the year you completed JHS</span>
-				<span class="text-[14px] text-center mt-1 text-red-600">E.g. xxxxxxx23</span>
+				<span class="text-[15px] mt-2">Pin</span>
+				<Input
+					bind:value={number}
+					color="green"
+					defaultClass="w-full"
+					placeholder="E.g. 1234"
+				/>
 			</div>
 			<!-- <Alert color="green">
 			<svg
