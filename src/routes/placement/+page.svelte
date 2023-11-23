@@ -15,7 +15,7 @@
 	let number = '';
 
 	let popupOpen = false;
-	let infoOpen = true;
+	let infoOpen = false;
 
 	let color = 'green';
 
