@@ -94,6 +94,11 @@
 
 		<div class="mt-2 flex flex-col gap-4">
 			<Label class="space-y-2 flex flex-col gap-2">
+				Passport Size Picture
+				<Fileupload />
+			</Label>
+
+			<Label class="space-y-2 flex flex-col gap-2">
 				Date of Birth
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
@@ -167,6 +172,17 @@
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={classesForSelect}
 					bind:value={formData.class}
+				/>
+			</Label>
+
+			<!-- Email -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Email
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="email"
+					bind:value={formData.email}
+					name="email"
 				/>
 			</Label>
 
@@ -290,7 +306,7 @@
 
 			<!-- Email -->
 			<Label class="space-y-2 flex flex-col gap-2">
-				Email
+				Guardian's Email
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="email"
