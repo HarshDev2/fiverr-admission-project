@@ -14,7 +14,7 @@
                 <Input color="green" placeholder="Enter the name"/>
             </div>
             <div>
-                <Label class="block mb-2">Phone</Label>
+                <Label class="block mb-2">Phone Number</Label>
                 <Input color="green" placeholder="Enter the number"/>
             </div>
             <div>
@@ -46,7 +46,7 @@
             <Label class="block mb-2">School Logo</Label>
             <Fileupload color="green" placeholder="Upload School Logo"/>
         </div>
-        <div class="mt-4">
+        <div class="mt-6">
             <Button color="green">Save</Button>
         </div>
 	</div>
