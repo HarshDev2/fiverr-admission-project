@@ -37,6 +37,7 @@
 		"firebase": "^10.6.0",
 		"firebase-admin": "^11.11.0",
 		"js-cookie": "^3.0.5",
+		"pdf-lib": "^1.17.1",
 		"radix-icons-svelte": "^1.2.1"
 	}
 }

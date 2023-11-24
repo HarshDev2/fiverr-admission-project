@@ -12,19 +12,18 @@ export async function POST({ cookies, request }) {
 		payment.id = paymentDoc.id;
 
 		if (payment) {
-			let pin = Math.floor(1000 + Math.random() * 9000);
+			let pin = Math.floor(10000 + Math.random() * 90000);
 
-			function generateTenDigitNumber() {
+			function generateSevenDigitNumber() {
 				const part1 = Math.floor(1000 + Math.random() * 9000);
-				const part2 = Math.floor(1000 + Math.random() * 9000);
-				const part3 = Math.floor(10 + Math.random() * 90);
+				const part2 = Math.floor(100 + Math.random() * 900);
 
-				return '' + part1 + part2 + part3;
+				return '' + part1 + part2;
 			}
 
-			let serialNo = generateTenDigitNumber();
+			let serialNo = generateSevenDigitNumber();
 
-			let studentDoc = await getDoc(doc(db, "students", payment.student));
+			let studentDoc = await getDoc(doc(db, 'students', payment.student));
 			let student = studentDoc.data();
 
 			console.log(student);
@@ -32,7 +31,7 @@ export async function POST({ cookies, request }) {
 			await updateDoc(studentDoc.ref, {
 				paymentCompleted: true,
 				paymentId: payment.id,
-				pin: pin,
+				pin: pin.toString(),
 				serial: serialNo
 			});
 		} else {

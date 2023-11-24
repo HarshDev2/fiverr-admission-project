@@ -1,4 +1,13 @@
 <script>
+	import { readFileAsArrayBuffer } from '$utils/readFileAsArrayBuffer.js';
+	import { updateDoc } from 'firebase/firestore';
+	import { db } from '$lib/firebase.js';
+	import { storage } from '$lib/firebase.js';
+
+	import { doc, getDoc } from 'firebase/firestore';
+
+	import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+
 	import {
 		Button,
 		Input,
@@ -20,33 +29,18 @@
 	import { onMount } from 'svelte';
 	let number = '';
 
-	let popupOpen = false;
-	let infoOpen = true;
-
 	let color = 'green';
 
-	async function handlePayment() {
-		let request = await fetch('/api/make-payment', {
-			method: 'POST',
-			body: JSON.stringify({
-				clientReference: 'da' + Math.floor(Math.random() * 1000000)
-			})
-		});
-
-		let response = await request.json();
-
-		console.log(response);
-
-		window.open(response.data.checkoutUrl, '_blank');
-	}
-
 	let formData = {
-		haveMedicalCondition: false
+		pic: undefined,
+		haveMedicalCondition: undefined,
+		dob: undefined,
+		admissionDate: new Date().toISOString().slice(0, 10),
+		admissionNumber: 'PSHS/23',
+		guardian: {
+			name: undefined
+		}
 	};
-
-	$: {
-		console.log(formData);
-	}
 
 	export let data;
 
@@ -60,7 +54,102 @@
 	data.houses.forEach((item) => {
 		housesForSelect.push({ value: item.id, name: item.name });
 	});
+
+	let errorModalShown = false;
+	let error = '';
+
+	async function submit() {
+
+		let studentDoc = await getDoc(doc(db, 'students', data.student.id));
+		let studentData = studentDoc.data();
+		if(studentData.formFilled){
+			error = 'You have already filled the form.';
+			errorModalShown = true;
+			window.open('/placement/details');
+			return;
+		}
+
+		if (
+			!formData.dob ||
+			!formData.pic ||
+			!formData.email ||
+			formData.haveMedicalCondition === undefined ||
+			(formData.haveMedicalCondition && !formData.medicalCondition) ||
+			!formData.beceYear ||
+			!formData.schoolType ||
+			!formData.previousJHS ||
+			!formData.religion ||
+			!formData.homeTown ||
+			!formData.presentAddress ||
+			!formData.guardian.name ||
+			!formData.guardian.relation ||
+			!formData.guardian.occupation ||
+			!formData.guardian.phoneNumber ||
+			!formData.guardian.email
+		) {
+			error = 'Please enter all of the required fields.';
+			errorModalShown = true;
+			return;
+		} else {
+			if (formData.pic[0].type !== 'image/jpeg' && formData.pic[0].type !== 'image/png') {
+				error = 'Please upload a png/jpeg file only.';
+				errorModalShown = true;
+				return;
+			}
+
+			let admissionNumber = 'PSHS/23' + Math.floor(1000 + Math.random() * 9000);
+
+			let image = await readFileAsArrayBuffer(formData.pic[0]);
+			const storageRef = ref(storage, `students_pics/${Date.now() + formData.pic[0].name}`);
+			try {
+				console.log(image);
+				const uploadTask = uploadBytes(storageRef, image);
+				await uploadTask;
+			} catch (error) {
+				console.error(`Error uploading ${files[0].name} to Firebase Storage:`, error);
+				throw error(500, 'File upload failed');
+			}
+
+			const downloadURL = await getDownloadURL(storageRef);
+
+			if(formData.haveMedicalCondition){
+				let medicalCondition = await readFileAsArrayBuffer(formData.medicalCondition[0]);
+				const storageRef = ref(storage, `students_medical/${Date.now() + formData.medicalCondition[0].name}`);
+				try {
+					console.log(medicalCondition);
+					const uploadTask = uploadBytes(storageRef, medicalCondition);
+					await uploadTask;
+				} catch (error) {
+					console.error(`Error uploading ${files[0].name} to Firebase Storage:`, error);
+					throw error(500, 'File upload failed');
+				}
+	
+				const downloadURL2 = await getDownloadURL(storageRef);
+	
+				formData.medicalCondition = downloadURL2;
+			}
+
+			formData.pic = downloadURL;
+
+			await updateDoc(doc(db, 'students', data.student.id), {
+				...formData,
+				formFilled: true,
+				admissionNumber
+			});
+
+			window.open('/placement/details');
+		}
+	}
 </script>
+
+<Modal title="Invalid Details" bind:open={errorModalShown} size="sm" autoclose>
+	<div class="text-base leading-relaxed">
+		{error}
+	</div>
+	<svelte:fragment slot="footer">
+		<Button color="green">Confirm</Button>
+	</svelte:fragment>
+</Modal>
 
 <div class="bg-background text-white flex flex-col min-h-[100vh] py-8 items-center justify-center">
 	<div class="flex flex-col min-h-[50vh] lg:min-h-[50vh] p-8 rounded-md bg-muted-background">
@@ -93,7 +182,7 @@
 		<div class="mt-2 flex flex-col gap-4">
 			<Label class="space-y-2 flex flex-col gap-2">
 				Passport Size Picture*
-				<Fileupload />
+				<Fileupload bind:files={formData.pic} />
 			</Label>
 
 			<Label class="space-y-2 flex flex-col gap-2">
@@ -129,7 +218,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="date"
-					value={new Date().toISOString().slice(0, 10)}
+					value={formData.admissionDate}
 					disabled
 					name="admissionDate"
 				/>
@@ -142,7 +231,7 @@
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
 					disabled
-					value="PSHS/23"
+					value={formData.admissionNumber}
 					name="admissionNumber"
 				/>
 			</Label>
@@ -154,7 +243,7 @@
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
 					disabled
-					value="Boys House 1"
+					value={formData.house}
 					name="admissionNumber"
 				/>
 			</Label>
@@ -165,6 +254,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					bind:value={formData.nhisNumber}
 					name="nhisNumber"
 				/>
 			</Label>
@@ -196,6 +286,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					bind:value={formData.presentAddress}
 					name="presentAddress"
 				/>
 			</Label>
@@ -206,6 +297,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					bind:value={formData.nationality}
 					name="nationality"
 				/>
 			</Label>
@@ -216,6 +308,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					bind:value={formData.homeTown}
 					name="homeTown"
 				/>
 			</Label>
@@ -226,6 +319,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					bind:value={formData.religion}
 					name="religion"
 				/>
 			</Label>
@@ -236,6 +330,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
+					bind:value={formData.previousJHS}
 					name="previousJHS"
 				/>
 			</Label>
@@ -249,6 +344,7 @@
 						{ value: 'public', name: 'Public' },
 						{ value: 'private', name: 'Private' }
 					]}
+					bind:value={formData.schoolType}
 				/>
 			</Label>
 
@@ -256,68 +352,89 @@
 			<Label class="space-y-2 flex flex-col gap-2">
 				BECE Year*
 				<Select
+					bind:value={formData.beceYear}
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
 						{ value: 2030, name: '2030' },
 						{
-							value: 2029, name: '2029'
+							value: 2029,
+							name: '2029'
 						},
 						{
-							value: 2028, name: '2028'
+							value: 2028,
+							name: '2028'
 						},
 						{
-							value: 2027,name: '2027'
+							value: 2027,
+							name: '2027'
 						},
 						{
-							value: 2026, name: '2026'
+							value: 2026,
+							name: '2026'
 						},
 						{
-							value: 2025, name: '2025'
+							value: 2025,
+							name: '2025'
 						},
 						{
-							value: 2024, name: '2024'
+							value: 2024,
+							name: '2024'
 						},
 						{
-							value: 2023, name: '2023'
+							value: 2023,
+							name: '2023'
 						},
 						{
-							value: 2022, name: '2022'
+							value: 2022,
+							name: '2022'
 						},
 						{
-							value: 2021, name: '2021'
+							value: 2021,
+							name: '2021'
 						},
 						{
-							value: 2020, name: '2020'
+							value: 2020,
+							name: '2020'
 						},
 						{
-							value: 2019, name: '2019'
+							value: 2019,
+							name: '2019'
 						},
 						{
-							value: 2018, name: '2018'
+							value: 2018,
+							name: '2018'
 						},
 						{
-							value: 2017, name: '2017'
+							value: 2017,
+							name: '2017'
 						},
 						{
-							value: 2016, name: '2016'
+							value: 2016,
+							name: '2016'
 						},
 						{
-							value: 2015, name: '2015'
+							value: 2015,
+							name: '2015'
 						},
 						{
-							value: 2014, name: '2014'
+							value: 2014,
+							name: '2014'
 						},
 						{
-							value: 2013, name: '2013'
+							value: 2013,
+							name: '2013'
 						},
 						{
-							value: 2012, name: '2012'
+							value: 2012,
+							name: '2012'
 						},
 						{
-							value: 2011, name: '2011'
+							value: 2011,
+							name: '2011'
 						},
 						{
-							value: 2010, name: '2010'
+							value: 2010,
+							name: '2010'
 						}
 					]}
 				/>
@@ -327,6 +444,7 @@
 			<Label class="space-y-2 flex flex-col gap-2">
 				Guardian's Name*
 				<Input
+					bind:value={formData.guardian.name}
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					name="guardianName"
 				/>
@@ -337,6 +455,7 @@
 			<Label class="space-y-2 flex flex-col gap-2">
 				Relation*
 				<Select
+					bind:value={formData.guardian.relation}
 					defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 					items={[
 						{ value: 'father', name: 'Father' },
@@ -351,10 +470,10 @@
 			<Label class="space-y-2 flex flex-col gap-2">
 				Occupation*
 				<Input
+					bind:value={formData.guardian.occupation}
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
 					name="occupation"
-					bind:value={formData.occupation}
 				/>
 			</Label>
 
@@ -365,7 +484,7 @@
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="number"
 					name="number"
-					bind:value={formData.phoneNumber}
+					bind:value={formData.guardian.phoneNumber}
 				/>
 			</Label>
 
@@ -375,7 +494,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="email"
-					bind:value={formData.email}
+					bind:value={formData.guardian.email}
 					name="email"
 				/>
 			</Label>
@@ -401,11 +520,7 @@
 		<div class="mt-8 w-full flex flex-row justify-center">
 			<Button
 				on:click={() => {
-					if (number == '99') {
-						infoOpen = true;
-					} else {
-						popupOpen = true;
-					}
+					submit();
 				}}
 				class="w-3/5"
 				color="green">Submit</Button

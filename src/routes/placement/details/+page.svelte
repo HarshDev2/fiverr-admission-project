@@ -16,34 +16,19 @@
 		Radio,
 		RadioButton
 	} from 'flowbite-svelte';
+
 	let number = '';
 
-	let popupOpen = false;
-	let infoOpen = true;
+	export let data;
+	
 
-	let color = 'green';
-
-	async function handlePayment() {
-		let request = await fetch('/api/make-payment', {
+	async function makeAdmissionLetter(){
+		let request = await fetch('/api/make-admission-pdf', {
 			method: 'POST',
 			body: JSON.stringify({
-				clientReference: 'da' + Math.floor(Math.random() * 1000000)
+				studentId: data.student.id,
 			})
 		});
-
-		let response = await request.json();
-
-		console.log(response);
-
-		window.open(response.data.checkoutUrl, '_blank');
-	}
-
-	let formData = {
-		haveMedicalCondition: false
-	};
-
-	$: {
-		console.log(formData);
 	}
 </script>
 
@@ -52,111 +37,109 @@
 		<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">Student Details</h1>
 
 		<div class="mt-2 flex flex-col-reverse md:flex-row gap-4 justify-between">
-				<div>
-					<Table divClass="mt-4" hoverable={true}>
-						<TableHead>
-							<TableHeadCell>Name</TableHeadCell>
-							<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
-						</TableHead>
+			<div>
+				<Table divClass="mt-4" hoverable={true}>
+					<TableHead>
+						<TableHeadCell>Name</TableHeadCell>
+						<TableHeadCell>{data.student.name}</TableHeadCell>
+					</TableHead>
 
-						<TableBody tableBodyClass="divide-y">
-							<TableBodyRow>
-								<TableBodyCell>Index Number</TableBodyCell>
-								<TableBodyCell>908978/008</TableBodyCell>
-							</TableBodyRow>
-							
-							<TableBodyRow>
-								<TableBodyCell>Gender</TableBodyCell>
-								<TableBodyCell>Male</TableBodyCell>
-							</TableBodyRow>
+					<TableBody tableBodyClass="divide-y">
+						<TableBodyRow>
+							<TableBodyCell>Index Number</TableBodyCell>
+							<TableBodyCell>{data.student.index}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Aggretate</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Gender</TableBodyCell>
+							<TableBodyCell>{data.student.gender}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Programme</TableBodyCell>
-								<TableBodyCell>Arts</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Aggretate</TableBodyCell>
+							<TableBodyCell>{data.student.aggregate}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Class</TableBodyCell>
-								<TableBodyCell>General Arts</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Programme</TableBodyCell>
+							<TableBodyCell>{data.student.programme}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Residence</TableBodyCell>
-								<TableBodyCell>Boarding</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Class</TableBodyCell>
+							<TableBodyCell>{data.student.class}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>House</TableBodyCell>
-								<TableBodyCell>Boys House 1	</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Residence</TableBodyCell>
+							<TableBodyCell>{data.student.status}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>House Capacity</TableBodyCell>
-								<TableBodyCell>44</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>House</TableBodyCell>
+							<TableBodyCell>{data.student.house}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>House Occupancy</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<!-- <TableBodyRow>
+							<TableBodyCell>House Capacity</TableBodyCell>
+							<TableBodyCell>{data.student}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>NHIS No</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>House Occupancy</TableBodyCell>
+							<TableBodyCell>{data}</TableBodyCell>
+						</TableBodyRow> -->
 
-							<TableBodyRow>
-								<TableBodyCell>Number</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>NHIS No</TableBodyCell>
+							<TableBodyCell>{data.student.nhisNumber}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Email</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Number</TableBodyCell>
+							<TableBodyCell>{data.student.guardian.phoneNumber}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Present Address</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Email</TableBodyCell>
+							<TableBodyCell>{data.student.guardian.email}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Nationality</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Present Address</TableBodyCell>
+							<TableBodyCell>{data.student.presentAddress}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Home Town</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Nationality</TableBodyCell>
+							<TableBodyCell>{data.student.nationality}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Religion</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Home Town</TableBodyCell>
+							<TableBodyCell>{data.student.homeTown}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>Previous JHS</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Religion</TableBodyCell>
+							<TableBodyCell>{data.student.religion}</TableBodyCell>
+						</TableBodyRow>
 
-							<TableBodyRow>
-								<TableBodyCell>BECE year</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
-							</TableBodyRow>
+						<TableBodyRow>
+							<TableBodyCell>Previous JHS</TableBodyCell>
+							<TableBodyCell>{data.student.previousJHS}</TableBodyCell>
+						</TableBodyRow>
 
-							
-						</TableBody>
-					</Table>
-				</div>
-				<div>
-					<img class="ml-2" src="/student.png" alt="" />
-				</div>
+						<TableBodyRow>
+							<TableBodyCell>BECE year</TableBodyCell>
+							<TableBodyCell>{data.student.beceYear}</TableBodyCell>
+						</TableBodyRow>
+					</TableBody>
+				</Table>
+			</div>
+			<div>
+				<img class="ml-2" src="{data.student.pic}" alt="" />
+			</div>
 		</div>
 
 		<!-- <Alert color="green">
@@ -179,11 +162,7 @@
 		<div class="mt-6 w-full flex flex-col items-center md:flex-row gap-2">
 			<Button
 				on:click={() => {
-					if (number == '99') {
-						infoOpen = true;
-					} else {
-						popupOpen = true;
-					}
+					makeAdmissionLetter();
 				}}
 				class="w-3/5 whitespace-nowrap"
 				color="green">Download Admission Letter</Button

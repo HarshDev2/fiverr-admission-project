@@ -1,5 +1,8 @@
 <script>
-	
+	import { getDoc, getDocs, where, query, collection } from 'firebase/firestore';
+	import { db } from '$lib/firebase';
+	import Cookies from 'js-cookie';
+
 	import {
 		Button,
 		Input,
@@ -12,7 +15,9 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
-	let number = '';
+
+	let serialNumber = '';
+	let pin = '';
 
 	let popupOpen = false;
 	let restorePopupOpen = false;
@@ -20,24 +25,51 @@
 
 	let color = 'green';
 
-	async function handlePayment(){
+	async function handlePayment() {
 		let request = await fetch('/api/make-payment', {
 			method: 'POST',
 			body: JSON.stringify({
-				clientReference: 'da' + Math.floor(Math.random() * 1000000),
+				clientReference: 'da' + Math.floor(Math.random() * 1000000)
 			})
 		});
 
 		let response = await request.json();
 
-		console.log(response)
+		console.log(response);
 
-		window.open(response.data.checkoutUrl, '_blank')
+		window.open(response.data.checkoutUrl, '_blank');
 	}
 
-	function sendPinaAndSerial(){
+	async function checkDetails() {
+		
+		let studentDocs = await getDocs(
+			query(
+				collection(db, 'students'),
+				where('pin', '==', pin.toString()),
+				where('serial', '==', serialNumber.toString())
+			)
+		);
 
+		Cookies.set('serial', serialNumber);
+		Cookies.set('pin', pin);
+
+		
+		if (studentDocs.empty) {
+			popupOpen = true;
+		} else {
+			let student = studentDocs.docs[0].data();
+			
+			if(student.formFilled == true){
+				window.open('/placement/details');
+				return;
+			}
+			window.open(
+				'/placement/form?serial=' + serialNumber + '&pin=' + pin,
+			)
+		}
 	}
+
+	function sendPinaAndSerial() {}
 </script>
 
 <div class="bg-background flex flex-col min-h-[100vh] items-center justify-center">
@@ -51,18 +83,13 @@
 			<div class="w-4/5 mt-4 flex flex-col">
 				<span class="text-[15px] my-1">Serial Number</span>
 				<Input
-					bind:value={number}
+					bind:value={serialNumber}
 					color="green"
 					defaultClass="w-full"
-					placeholder="E.g. xxxxxxxxxx23"
+					placeholder="E.g. xxxxxxxx"
 				/>
 				<span class="text-[15px] mt-2">Pin</span>
-				<Input
-					bind:value={number}
-					color="green"
-					defaultClass="w-full"
-					placeholder="E.g. 1234"
-				/>
+				<Input type={"number"} bind:value={pin} color="green" defaultClass="w-full" placeholder="E.g. 1234" />
 			</div>
 			<!-- <Alert color="green">
 			<svg
@@ -93,11 +120,7 @@
 
 				<Button
 					on:click={() => {
-						if (number == '99') {
-							infoOpen = true;
-						} else {
-							popupOpen = true;
-						}
+						checkDetails();
 					}}
 					class="w-3/5"
 					color="green">Login</Button
@@ -124,47 +147,45 @@
 		</Modal>
 
 		{#if infoOpen}
-			
-				<div class="flex flex-row">
-					<div>
-						<Table divClass="mt-4" hoverable={true}>
-							<TableHead>
-								<TableHeadCell>Name</TableHeadCell>
-								<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
-							</TableHead>
+			<div class="flex flex-row">
+				<div>
+					<Table divClass="mt-4" hoverable={true}>
+						<TableHead>
+							<TableHeadCell>Name</TableHeadCell>
+							<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
+						</TableHead>
 
-							<TableBody tableBodyClass="divide-y">
-								<TableBodyRow>
-									<TableBodyCell>Index Number</TableBodyCell>
-									<TableBodyCell>908978/008</TableBodyCell>
-								</TableBodyRow>
-								<TableBodyRow>
-									<TableBodyCell>PROGRAMME</TableBodyCell>
-									<TableBodyCell>General Arts</TableBodyCell>
-								</TableBodyRow>
-								
-								<TableBodyRow>
-									<TableBodyCell>Gender</TableBodyCell>
-									<TableBodyCell>Male</TableBodyCell>
-								</TableBodyRow>
+						<TableBody tableBodyClass="divide-y">
+							<TableBodyRow>
+								<TableBodyCell>Index Number</TableBodyCell>
+								<TableBodyCell>908978/008</TableBodyCell>
+							</TableBodyRow>
+							<TableBodyRow>
+								<TableBodyCell>PROGRAMME</TableBodyCell>
+								<TableBodyCell>General Arts</TableBodyCell>
+							</TableBodyRow>
 
-								<TableBodyRow>
-									<TableBodyCell>Residence</TableBodyCell>
-									<TableBodyCell>Boarding</TableBodyCell>
-								</TableBodyRow>
-								
-								<TableBodyRow>
-									<TableBodyCell>Aggretate</TableBodyCell>
-									<TableBodyCell>12</TableBodyCell>
-								</TableBodyRow>
-								
-								
-							</TableBody>
-						</Table>
-					</div>
+							<TableBodyRow>
+								<TableBodyCell>Gender</TableBodyCell>
+								<TableBodyCell>Male</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Residence</TableBodyCell>
+								<TableBodyCell>Boarding</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Aggretate</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+						</TableBody>
+					</Table>
 				</div>
-				<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green">Buy Admission Voucher</Button>
-			
+			</div>
+			<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
+				>Buy Admission Voucher</Button
+			>
 		{/if}
 	</div>
 </div>
