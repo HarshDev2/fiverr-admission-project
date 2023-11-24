@@ -1,5 +1,4 @@
 <script>
-	
 	import {
 		Button,
 		Input,
@@ -19,19 +18,42 @@
 
 	let color = 'green';
 
-	async function handlePayment(){
+	let studentData;
+
+	async function handlePayment() {
 		let request = await fetch('/api/make-payment', {
 			method: 'POST',
 			body: JSON.stringify({
-				clientReference: 'da' + Math.floor(Math.random() * 1000000),
+				student: studentData.id
 			})
 		});
 
 		let response = await request.json();
 
-		console.log(response)
+		console.log(response);
 
-		window.open(response.data.checkoutUrl, '_blank')
+		window.open(response.data.checkoutUrl, '_blank');
+	}
+
+
+	async function getStudentDetails(){
+		let request = await fetch('/api/get-student-details', {
+			method: 'POST',
+			body: JSON.stringify({
+				student: number
+			})
+		});
+
+		let response = await request.json();
+
+		if(response.success){
+			studentData = response.student;
+			infoOpen = true;
+		} else {
+			popupOpen = true;
+		}
+
+		console.log(response);
 	}
 </script>
 
@@ -51,7 +73,8 @@
 					defaultClass="w-full"
 					placeholder="E.g. xxxxxxxxxx23"
 				/>
-				<span class="text-[14px] text-center mt-1 text-red-600 ">Add the year you completed JHS</span>
+				<span class="text-[14px] text-center mt-1 text-red-600">Add the year you completed JHS</span
+				>
 				<span class="text-[14px] text-center mt-1 text-red-600">E.g. xxxxxxx23</span>
 			</div>
 			<!-- <Alert color="green">
@@ -74,21 +97,18 @@
 			<div class="mt-6 w-full flex flex-row justify-center">
 				<Button
 					on:click={() => {
-						if (number == '99') {
-							infoOpen = true;
-						} else {
-							popupOpen = true;
-						}
+						getStudentDetails();
 					}}
 					class="w-3/5"
-					color="green">Login</Button
+					color="green">Verify now</Button
 				>
 			</div>
 		{/if}
 
 		<Modal title="Invalid Number" bind:open={popupOpen} size="sm" autoclose>
 			<div class="text-base leading-relaxed">
-				The Index Number you entered is invalid. Please check and try again.
+				The index number you entered is invalid or not yet added into the system. Contact the school
+				or call/whatsapp IT Department on 0205458775.
 			</div>
 			<svelte:fragment slot="footer">
 				<Button color="green">Confirm</Button>
@@ -96,47 +116,45 @@
 		</Modal>
 
 		{#if infoOpen}
-			
-				<div class="flex flex-row">
-					<div>
-						<Table divClass="mt-4" hoverable={true}>
-							<TableHead>
-								<TableHeadCell>Name</TableHeadCell>
-								<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
-							</TableHead>
+			<div class="flex flex-row">
+				<div>
+					<Table divClass="mt-4" hoverable={true}>
+						<TableHead>
+							<TableHeadCell>Name</TableHeadCell>
+							<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
+						</TableHead>
 
-							<TableBody tableBodyClass="divide-y">
-								<TableBodyRow>
-									<TableBodyCell>Index Number</TableBodyCell>
-									<TableBodyCell>908978/008</TableBodyCell>
-								</TableBodyRow>
-								<TableBodyRow>
-									<TableBodyCell>PROGRAMME</TableBodyCell>
-									<TableBodyCell>General Arts</TableBodyCell>
-								</TableBodyRow>
-								
-								<TableBodyRow>
-									<TableBodyCell>Gender</TableBodyCell>
-									<TableBodyCell>Male</TableBodyCell>
-								</TableBodyRow>
+						<TableBody tableBodyClass="divide-y">
+							<TableBodyRow>
+								<TableBodyCell>Index Number</TableBodyCell>
+								<TableBodyCell>908978/008</TableBodyCell>
+							</TableBodyRow>
+							<TableBodyRow>
+								<TableBodyCell>PROGRAMME</TableBodyCell>
+								<TableBodyCell>General Arts</TableBodyCell>
+							</TableBodyRow>
 
-								<TableBodyRow>
-									<TableBodyCell>Residence</TableBodyCell>
-									<TableBodyCell>Boarding</TableBodyCell>
-								</TableBodyRow>
-								
-								<TableBodyRow>
-									<TableBodyCell>Aggretate</TableBodyCell>
-									<TableBodyCell>12</TableBodyCell>
-								</TableBodyRow>
-								
-								
-							</TableBody>
-						</Table>
-					</div>
+							<TableBodyRow>
+								<TableBodyCell>Gender</TableBodyCell>
+								<TableBodyCell>Male</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Residence</TableBodyCell>
+								<TableBodyCell>Boarding</TableBodyCell>
+							</TableBodyRow>
+
+							<TableBodyRow>
+								<TableBodyCell>Aggretate</TableBodyCell>
+								<TableBodyCell>12</TableBodyCell>
+							</TableBodyRow>
+						</TableBody>
+					</Table>
 				</div>
-				<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green">Buy Admission Voucher</Button>
-			
+			</div>
+			<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
+				>Buy Admission Voucher</Button
+			>
 		{/if}
 	</div>
 </div>

@@ -1,27 +1,19 @@
+import { generateRandomToken } from '$utils/generateRandomToken.js';
 import { json } from '@sveltejs/kit';
 import api from 'api';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '$lib/firebase.js';
 
 export async function POST({ request }) {
 
     let requestData = await request.json();
+	let url = new URL(request.url);
 
-	// let hubtle = api('@hubtel/v1.0#15dkgclna41gzg');
+	let payment = await addDoc(collection(db, 'payments'), {
+		student: requestData.student
+	});
 
-	// hubtle.auth('2oyn1P', '48fee06220b14464a56f33301be74eff');
-	// hubtle
-	// 	.onlineCheckout({
-	// 		totalAmount: 100,
-	// 		description: 'hello',
-	// 		callbackUrl: 'http://localhost:5173/placement',
-	// 		returnUrl: 'http://localhost:5173/placement',
-	// 		cancellationUrl: 'http://localhost:5173/placement',
-	// 		merchantAccountNumber: 'dwadwdwaa',
-	// 		clientReference: 'dwa'
-	// 	})
-	// 	.then(({ data }) => console.log(data))
-	// 	.catch((err) => console.error(err));
-
-    console.log(requestData);
+	console.log(payment.id);
 
 	let request1 = await fetch('https://payproxyapi.hubtel.com/items/initiate', {
 		method: 'POST',
@@ -32,12 +24,12 @@ export async function POST({ request }) {
 		},
 		body: JSON.stringify({
 			totalAmount: 0.1,
-			description: 'hello',
-			callbackUrl: 'http://localhost:5173/placement',
-			returnUrl: 'http://localhost:5173/placement',
-			cancellationUrl: 'http://localhost:5173/placement',
+			description: 'Payment for admission voucher.',
+			callbackUrl: url.origin + '/api/payment/webhook',
+			returnUrl: url.origin + '/placement/login',
+			cancellationUrl: url.origin + '/placement',
 			merchantAccountNumber: '2018421',
-			clientReference: requestData.clientReference
+			clientReference: payment.id
 		})
 	});
 

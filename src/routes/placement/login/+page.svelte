@@ -15,6 +15,7 @@
 	let number = '';
 
 	let popupOpen = false;
+	let restorePopupOpen = false;
 	let infoOpen = false;
 
 	let color = 'green';
@@ -33,6 +34,10 @@
 
 		window.open(response.data.checkoutUrl, '_blank')
 	}
+
+	function sendPinaAndSerial(){
+
+	}
 </script>
 
 <div class="bg-background flex flex-col min-h-[100vh] items-center justify-center">
@@ -42,7 +47,7 @@
 		{#if !infoOpen}
 			<h1 class="text-2xl text-[#1aa841] font-semibold mb-4">PEKI SENIOR HIGH SCHOOL</h1>
 			<img class="max-h-[20vh]" src={'/favicon.png'} alt="School Logo" />
-			<h1 class="text-xl text-black mt-6 font-bold text-center">Verify Now</h1>
+			<h1 class="text-xl text-black mt-6 font-bold text-center">Applicant login</h1>
 			<div class="w-4/5 mt-4 flex flex-col">
 				<span class="text-[15px] my-1">Serial Number</span>
 				<Input
@@ -76,7 +81,16 @@
 
 			Add the year you completed JHS.
 		</Alert> -->
-			<div class="mt-6 w-full flex flex-row justify-center">
+			<div class="mt-6 w-full flex flex-col items-center gap-2">
+				<Button
+					on:click={() => {
+						sendPinaAndSerial();
+						restorePopupOpen = true;
+					}}
+					class="w-3/5"
+					color="green">Restore Pin/Serial</Button
+				>
+
 				<Button
 					on:click={() => {
 						if (number == '99') {
@@ -90,6 +104,15 @@
 				>
 			</div>
 		{/if}
+
+		<Modal title="Serial/Pin Sent" bind:open={restorePopupOpen} size="sm" autoclose>
+			<div class="text-base leading-relaxed">
+				The serial/pin has been sent to your mobile number. Please check and try again.
+			</div>
+			<svelte:fragment slot="footer">
+				<Button color="green">Confirm</Button>
+			</svelte:fragment>
+		</Modal>
 
 		<Modal title="Invalid Number" bind:open={popupOpen} size="sm" autoclose>
 			<div class="text-base leading-relaxed">
