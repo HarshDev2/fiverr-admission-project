@@ -23,7 +23,7 @@ export async function load(){
             counts.maleStudents++;
         } else if(student.gender == "female"){
             counts.femaleStudents++;
-        } else {
+        } else if(student.gender == "other") {
             counts.otherStudents++;
         }
     });

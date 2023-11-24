@@ -41,7 +41,6 @@
 	}
 
 	async function checkDetails() {
-		
 		let studentDocs = await getDocs(
 			query(
 				collection(db, 'students'),
@@ -53,23 +52,41 @@
 		Cookies.set('serial', serialNumber);
 		Cookies.set('pin', pin);
 
-		
 		if (studentDocs.empty) {
 			popupOpen = true;
 		} else {
 			let student = studentDocs.docs[0].data();
-			
-			if(student.formFilled == true){
+
+			if (student.formFilled == true) {
 				window.open('/placement/details');
 				return;
 			}
-			window.open(
-				'/placement/form?serial=' + serialNumber + '&pin=' + pin,
-			)
+			window.open('/placement/form?serial=' + serialNumber + '&pin=' + pin);
 		}
 	}
 
-	function sendPinaAndSerial() {}
+	let index = '';
+
+	async function sendPinAndSerial() {
+		let studentDocs = await getDocs(
+			query(collection(db, 'students'), where('index', '==', index.toString()))
+		);
+
+		if (!studentDocs.empty) {
+			let student = studentDocs.docs[0].data();
+
+			if (student.pin && student.serial && student.guardian && student.guardian.phoneNumber) {
+				await fetch(
+					'https://sms.hubtel.com/v1/messages/send?clientsecret=ulapfgeb&clientid=gukisadt&from=Pekisec&to=' +
+						student.guardian.phoneNumber +
+						'&content=Your ward has requested for his/her serial number and pin. Serial: ' +
+						student.serial +
+						' Pin: ' +
+						student.pin,
+				);
+			}
+		}
+	}
 </script>
 
 <div class="bg-background flex flex-col min-h-[100vh] items-center justify-center">
@@ -89,7 +106,13 @@
 					placeholder="E.g. xxxxxxxx"
 				/>
 				<span class="text-[15px] mt-2">Pin</span>
-				<Input type={"number"} bind:value={pin} color="green" defaultClass="w-full" placeholder="E.g. 1234" />
+				<Input
+					type={'number'}
+					bind:value={pin}
+					color="green"
+					defaultClass="w-full"
+					placeholder="E.g. 1234"
+				/>
 			</div>
 			<!-- <Alert color="green">
 			<svg
@@ -111,7 +134,7 @@
 			<div class="mt-6 w-full flex flex-col items-center gap-2">
 				<Button
 					on:click={() => {
-						sendPinaAndSerial();
+						sendPinAndSerial();
 						restorePopupOpen = true;
 					}}
 					class="w-3/5"
@@ -128,9 +151,10 @@
 			</div>
 		{/if}
 
-		<Modal title="Serial/Pin Sent" bind:open={restorePopupOpen} size="sm" autoclose>
+		<Modal title="Provide Index Number" bind:open={restorePopupOpen} size="sm" autoclose>
 			<div class="text-base leading-relaxed">
-				The serial/pin has been sent to your mobile number. Please check and try again.
+				<span>Enter the index number.</span>
+				<Input bind:value={index} color={'green'} />
 			</div>
 			<svelte:fragment slot="footer">
 				<Button color="green">Confirm</Button>
