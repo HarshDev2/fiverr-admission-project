@@ -1,7 +1,7 @@
 import { generateRandomToken } from '$utils/generateRandomToken.js';
 import { json } from '@sveltejs/kit';
 import api from 'api';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '$lib/firebase.js';
 
 export async function POST({ request }) {
@@ -15,6 +15,11 @@ export async function POST({ request }) {
 
 	console.log(payment.id);
 
+	let schoolDetailsDoc = await getDoc(doc(db, 'school', 'details'));
+	let schoolDetails = schoolDetailsDoc.data();
+
+	console.log(schoolDetails);
+
 	let request1 = await fetch('https://payproxyapi.hubtel.com/items/initiate', {
 		method: 'POST',
 		headers: {
@@ -23,7 +28,7 @@ export async function POST({ request }) {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
-			totalAmount: 0.1,
+			totalAmount: schoolDetails.ticketPrice,
 			description: 'Payment for admission voucher.',
 			callbackUrl: url.origin + '/api/payment/webhook',
 			returnUrl: url.origin + '/placement/login',
