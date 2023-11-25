@@ -29,6 +29,34 @@
 				studentId: data.student.id,
 			})
 		});
+
+		let response = await request.json();
+
+		console.log(response)
+
+		if(response.success){
+			window.open(response.link, '_blank');
+		}
+	}
+
+	async function makePersonalRecordPdf(){
+		let request = await fetch('/api/make-personal-record-pdf', {
+			method: 'POST',
+			body: JSON.stringify({
+				studentId: data.student.id,
+			})
+		});
+
+		let response = await request.json();
+
+		console.log(response)
+
+		if(response.success){
+			window.open(response.link, '_blank')
+			alert(
+				'Redirection failed!' + " Use this link to download the file: " + response.link
+			)
+		}
 	}
 </script>
 
@@ -169,11 +197,7 @@
 			>
 			<Button
 				on:click={() => {
-					if (number == '99') {
-						infoOpen = true;
-					} else {
-						popupOpen = true;
-					}
+					makePersonalRecordPdf();
 				}}
 				class="w-3/5 whitespace-nowrap"
 				color="green">Download Personal Record</Button
@@ -181,11 +205,7 @@
 
 			<Button
 				on:click={() => {
-					if (number == '99') {
-						infoOpen = true;
-					} else {
-						popupOpen = true;
-					}
+					window.open('/prospectus.pdf', '_blank');
 				}}
 				class="w-3/5 whitespace-nowrap"
 				color="green">Download Prospectus</Button
