@@ -1,4 +1,3 @@
-import { makeAdmissionLetter } from '$utils/makeadmissionLetter';
 import { json } from '@sveltejs/kit';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
