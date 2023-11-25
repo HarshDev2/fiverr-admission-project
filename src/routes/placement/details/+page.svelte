@@ -53,9 +53,6 @@
 
 		if(response.success){
 			window.open(response.link, '_blank')
-			alert(
-				'Redirection failed!' + " Use this link to download the file: " + response.link
-			)
 		}
 	}
 </script>

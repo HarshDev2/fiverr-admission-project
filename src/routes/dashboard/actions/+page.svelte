@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { db } from '$lib/firebase.js';
-	import { updateDoc, doc, addDoc, collection } from 'firebase/firestore';
+	import {
+		updateDoc,
+		doc,
+		addDoc,
+		collection,
+		setDoc,
+		getDocs,
+		query,
+		where
+	} from 'firebase/firestore';
 	import { Button, Fileupload, Input, Label } from 'flowbite-svelte';
 	import { Modal } from 'flowbite-svelte';
 
@@ -72,18 +81,57 @@
 					data[i].Status,
 					data[i].Track
 				);
+
 				await addDoc(collection(db, 'students'), {
 					aggregate: data[i].Aggregate,
 					name: data[i].Name,
 					index: data[i].Index,
 					programme: data[i].Programme,
 					status: data[i].Status,
-					track: data[i].Track
+					track: data[i].Track,
+					guardian: {
+						phoneNumber: data[i].Contact
+					}
 				});
+
+				await fetch("/send-message", {
+					method: "POST",
+					body: JSON.stringify({
+						message: "Your ward has been admitted to Peki Senior High School. His/Her index number is" + data[i].Index + ". Please visit admission.pekishs.com/placement to continue the admission process.",
+						phoneNumber: data[i].Contact
+					})
+				})
 			}
 		};
 
 		reader.readAsText(file);
+	}
+
+	let ticketPrice = 0;
+
+	async function setNewPrice() {
+		await setDoc(doc(db, 'school', 'details'), {
+			ticketPrice
+		});
+	}
+
+	let messageToSend;
+
+	async function sendMessagesToApplicants() {
+		const students = await getDocs(query(collection(db, 'students')));
+		students.docs.forEach(async (student) => {
+			student = student.data();
+
+			if (!student.paymentStatus && student.guardian && student.guardian.phoneNumber) {
+				await fetch('/api/send-message', {
+					method: 'POST',
+					body: JSON.stringify({
+						message: messageToSend,
+						phoneNumber: student.guardian.phoneNumber
+					})
+				});
+			}
+		});
 	}
 </script>
 
@@ -102,15 +150,26 @@
 
 		<div class="mt-2">
 			<Label class="block mb-2">Admission Ticket Price</Label>
-			<Input color="green" />
+			<Input bind:value={ticketPrice} type="number" color="green" />
 		</div>
 
-		<div class="mt-2">
+		<Button class="mt-2" on:click={setNewPrice} color="green">Save Price</Button>
+
+		<div class="mt-4">
 			<Label class="block mb-2">Message</Label>
 			<Input color="green" />
 		</div>
 
-		<Button class="mt-2" on:click={updatePassword} color="green">Save</Button>
+		<Button class="mt-2" on:click={updatePassword} color="green">Save Message</Button>
+
+		<div class="mt-4">
+			<Label class="block mb-2">Message to send to applicants.</Label>
+			<Input bind:value={messageToSend} color="green" />
+		</div>
+
+		<div class="">
+			<Button class="mt-2" on:click={sendMessagesToApplicants} color="green">Send</Button>
+		</div>
 	</div>
 </div>
 <Modal title="Incorrect Details" bind:open={errorModalOpened} autoclose outsideclose>

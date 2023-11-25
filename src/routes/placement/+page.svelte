@@ -121,32 +121,32 @@
 					<Table divClass="mt-4" hoverable={true}>
 						<TableHead>
 							<TableHeadCell>Name</TableHeadCell>
-							<TableHeadCell>JOSEP GURDIOLA</TableHeadCell>
+							<TableHeadCell>{studentData.name}</TableHeadCell>
 						</TableHead>
 
 						<TableBody tableBodyClass="divide-y">
 							<TableBodyRow>
 								<TableBodyCell>Index Number</TableBodyCell>
-								<TableBodyCell>908978/008</TableBodyCell>
+								<TableBodyCell>{studentData.index}</TableBodyCell>
 							</TableBodyRow>
 							<TableBodyRow>
 								<TableBodyCell>PROGRAMME</TableBodyCell>
-								<TableBodyCell>General Arts</TableBodyCell>
+								<TableBodyCell>{studentData.programme}</TableBodyCell>
 							</TableBodyRow>
 
 							<TableBodyRow>
 								<TableBodyCell>Gender</TableBodyCell>
-								<TableBodyCell>Male</TableBodyCell>
+								<TableBodyCell>{studentData.gender}</TableBodyCell>
 							</TableBodyRow>
 
 							<TableBodyRow>
 								<TableBodyCell>Residence</TableBodyCell>
-								<TableBodyCell>Boarding</TableBodyCell>
+								<TableBodyCell>{studentData.status}</TableBodyCell>
 							</TableBodyRow>
 
 							<TableBodyRow>
 								<TableBodyCell>Aggretate</TableBodyCell>
-								<TableBodyCell>12</TableBodyCell>
+								<TableBodyCell>{studentData.aggregate}</TableBodyCell>
 							</TableBodyRow>
 						</TableBody>
 					</Table>
