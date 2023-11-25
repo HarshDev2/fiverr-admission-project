@@ -4,6 +4,8 @@ import { db } from '$lib/firebase.js';
 export async function POST({ cookies, request }) {
 	let data = await request.json();
 
+	let url = new URL(request.url);
+
 	if (data.Data.Status == 'Success') {
 		console.log(data.Data.CheckoutId);
 
@@ -34,6 +36,15 @@ export async function POST({ cookies, request }) {
 				pin: pin.toString(),
 				serial: serialNo
 			});
+
+			await fetch(url.origin + "/api/send-message", {
+				method: "POST",
+				body: JSON.stringify({
+					phoneNumber: student.guardian.phoneNumber,
+					message: `Your admission fee payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
+				})
+			});
+
 		} else {
 			console.log('Payment not found');
 		}
