@@ -91,7 +91,7 @@ export async function POST({ request }) {
 			student.gender,
 			student.religion,
 			student.status,
-			student.house,
+			house1,
 			student.aggregate,
 			student.admissionDate,
 			student.admissionNumber,
