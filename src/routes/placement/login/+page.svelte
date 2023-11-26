@@ -214,6 +214,9 @@
 			<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
 				>Buy Admission Voucher</Button
 			>
+			<Button class="w-fit mt-2 ml-2" color="green"
+				>Login</Button
+			>
 		{/if}
 	</div>
 </div>

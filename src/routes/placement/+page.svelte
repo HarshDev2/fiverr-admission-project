@@ -213,32 +213,41 @@
 			</div>
 
 			<div class="flex flex-col md:flex-row gap-1">
-			{#if !studentData.guardian || !studentData.guardian.phoneNumber}
-				<Button
-					on:click={() => {
-						numberAddOpen = true;
-					}}
-					class="w-fit mt-2 ml-2"
-					color="green">Add Phone Number</Button
-				>
-			{/if}
+				{#if !studentData.paymentCompleted}
+					{#if !studentData.guardian || !studentData.guardian.phoneNumber}
+						<Button
+							on:click={() => {
+								numberAddOpen = true;
+							}}
+							class="w-fit mt-2 ml-2"
+							color="green">Add Phone Number</Button
+						>
+					{/if}
 
-				{#if studentData.guardian && studentData.guardian.phoneNumber}
+					{#if studentData.guardian && studentData.guardian.phoneNumber}
+						<Button
+							on:click={() => {
+								editNumberOpen = true;
+							}}
+							class="w-fit mt-2 ml-2"
+							color="green">Edit Phone Number</Button
+						>
+					{/if}
+
 					<Button
-						on:click={() => {
-							editNumberOpen = true;
-						}}
+						disabled={!studentData.guardian || !studentData.guardian.phoneNumber ? true : false}
+						on:click={handlePayment}
 						class="w-fit mt-2 ml-2"
-						color="green">Edit Phone Number</Button
+						color="green">Buy Admission Voucher</Button
 					>
+				{:else}
+					<a href="/placement/login">
+						<Button
+							class="w-fit mt-2 ml-2"
+							color="green">Continue Process</Button
+						>
+					</a>
 				{/if}
-
-				<Button
-					disabled={!studentData.guardian || !studentData.guardian.phoneNumber ? true : false}
-					on:click={handlePayment}
-					class="w-fit mt-2 ml-2"
-					color="green">Buy Admission Voucher</Button
-				>
 			</div>
 		{/if}
 	</div>
