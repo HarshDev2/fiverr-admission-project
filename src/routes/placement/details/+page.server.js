@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { getDocs, query, collection, where } from 'firebase/firestore';
+import { getDocs, query, collection, where, getDoc } from 'firebase/firestore';
 import { db } from '$lib/firebase.js';
 
 export async function load({ cookies }) {
@@ -29,9 +29,24 @@ export async function load({ cookies }) {
         throw redirect(302, `/placement/form?pin=${student.pin}&serial=${student.serial}`);
     }
 
-    console.log(student);
+    let houses = [];
+    let housesDocs = await getDocs(collection(db, 'houses'));
+    housesDocs.docs.forEach((doc) => {
+        houses.push(doc.data());
+    });
+    
+    let house1;
+
+    houses.forEach((house) => {
+        if(house.id == student.house) {
+            house1 = house;
+        }
+    });
+
+    console.log(houses, student.house);
 
     return {
-        student
+        student,
+        house: house1
     }
 }

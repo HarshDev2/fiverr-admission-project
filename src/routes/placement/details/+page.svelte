@@ -104,7 +104,7 @@
 
 						<TableBodyRow>
 							<TableBodyCell>House</TableBodyCell>
-							<TableBodyCell>{data.student.house}</TableBodyCell>
+							<TableBodyCell>{data.house.name}</TableBodyCell>
 						</TableBodyRow>
 
 						<!-- <TableBodyRow>
