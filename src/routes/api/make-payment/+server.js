@@ -37,6 +37,8 @@ export async function POST({ request }) {
 			clientReference: payment.id
 		})
 	});
+	
+	console.log(payment.id)
 
     let data = await request1.json();
 

@@ -1,5 +1,6 @@
 import { getDoc, getDocs, doc, updateDoc, collection, where } from 'firebase/firestore';
 import { db } from '$lib/firebase.js';
+import { json } from '@sveltejs/kit';
 
 export async function POST({ cookies, request }) {
 	let data = await request.json();
@@ -7,7 +8,7 @@ export async function POST({ cookies, request }) {
 	let url = new URL(request.url);
 
 	if (data.Data.Status == 'Success') {
-		console.log(data.Data.CheckoutId);
+		
 
 		let paymentDoc = await getDoc(doc(db, 'payments', data.Data.ClientReference));
 		let payment = paymentDoc.data();
@@ -28,8 +29,7 @@ export async function POST({ cookies, request }) {
 			let studentDoc = await getDoc(doc(db, 'students', payment.student));
 			let student = studentDoc.data();
 
-			console.log(student);
-
+			
 			await updateDoc(studentDoc.ref, {
 				paymentCompleted: true,
 				paymentId: payment.id,
@@ -37,16 +37,19 @@ export async function POST({ cookies, request }) {
 				serial: serialNo
 			});
 
-			await fetch("https://admission.pekishs.com/api/send-message", {
-				method: "POST",
-				body: JSON.stringify({
-					phoneNumber: student.guardian.phoneNumber.toString(),
-					content: `Your admission fee payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
-				})
-			});
+			let request2 = await fetch(
+				'https://sms.hubtel.com/v1/messages/send?clientsecret=ulapfgeb&clientid=gukisadt&from=PekiSHS&to=' +
+					student.guardian.phoneNumber +
+					'&content=' +
+					`Your admission fee payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
+			);
 
 		} else {
 			console.log('Payment not found');
 		}
 	}
+
+	return json({
+		success: true
+	})
 }
