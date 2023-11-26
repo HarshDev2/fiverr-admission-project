@@ -136,6 +136,9 @@
 							},
 							{ merge: true }
 						);
+
+						if (!studentData.guardian) studentData.guardian = {};
+						studentData.guardian.phoneNumber = phoneNumber;
 					}}
 					color="green">Confirm</Button
 				>
@@ -158,6 +161,9 @@
 							},
 							{ merge: true }
 						);
+
+						if (!studentData.guardian) studentData.guardian = {};
+						studentData.guardian.phoneNumber = phoneNumber;
 					}}
 					color="green">Confirm</Button
 				>
@@ -206,6 +212,7 @@
 				<span>You will receive the login credentials and further information on this number.</span>
 			</div>
 
+			<div class="flex flex-col md:flex-row gap-1">
 			{#if !studentData.guardian || !studentData.guardian.phoneNumber}
 				<Button
 					on:click={() => {
@@ -214,21 +221,25 @@
 					class="w-fit mt-2 ml-2"
 					color="green">Add Phone Number</Button
 				>
-			{:else}
-			<div class="flex flex-col md:flex-row gap-1">
-				<Button
-					on:click={() => {
-						editNumberOpen = true;
-					}}
-					class="w-fit mt-2 ml-2"
-					color="green">Edit Phone Number</Button
-				>
-
-				<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
-					>Buy Admission Voucher</Button
-				>
-				</div>
 			{/if}
+
+				{#if studentData.guardian && studentData.guardian.phoneNumber}
+					<Button
+						on:click={() => {
+							editNumberOpen = true;
+						}}
+						class="w-fit mt-2 ml-2"
+						color="green">Edit Phone Number</Button
+					>
+				{/if}
+
+				<Button
+					disabled={!studentData.guardian || !studentData.guardian.phoneNumber ? true : false}
+					on:click={handlePayment}
+					class="w-fit mt-2 ml-2"
+					color="green">Buy Admission Voucher</Button
+				>
+			</div>
 		{/if}
 	</div>
 </div>
