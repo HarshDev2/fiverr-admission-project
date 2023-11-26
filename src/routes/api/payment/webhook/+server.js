@@ -41,7 +41,7 @@ export async function POST({ cookies, request }) {
 				method: "POST",
 				body: JSON.stringify({
 					phoneNumber: student.guardian.phoneNumber.toString(),
-					message: `Your admission fee payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
+					content: `Your admission fee payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
 				})
 			});
 

@@ -68,7 +68,6 @@
 	let index = '';
 
 	async function sendPinAndSerial() {
-		console.log(index)
 		let studentDocs = await getDocs(
 			query(collection(db, 'students'), where('index', '==', index.toString()))
 		);
@@ -77,8 +76,6 @@
 
 		if (!studentDocs.empty) {
 			let student = studentDocs.docs[0].data();
-
-			console.log(student);
 
 			if (student.pin && student.serial && student.guardian && student.guardian.phoneNumber) {
 				await fetch('/api/send-message', {
