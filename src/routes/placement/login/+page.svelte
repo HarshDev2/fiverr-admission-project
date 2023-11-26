@@ -76,14 +76,17 @@
 			let student = studentDocs.docs[0].data();
 
 			if (student.pin && student.serial && student.guardian && student.guardian.phoneNumber) {
-				await fetch(
-					'https://sms.hubtel.com/v1/messages/send?clientsecret=ulapfgeb&clientid=gukisadt&from=Pekisec&to=' +
-						student.guardian.phoneNumber +
-						'&content=Your ward has requested for his/her serial number and pin. Serial: ' +
-						student.serial +
-						' Pin: ' +
-						student.pin,
-				);
+				await fetch('/api/send-message', {
+					method: 'POST',
+					body: JSON.stringify({
+						phoneNumber: student.guardian.phoneNumber,
+						content:
+							'Your ward has requested for his/her serial number and pin. Serial: ' +
+							student.serial +
+							' Pin: ' +
+							student.pin
+					})
+				});
 			}
 		}
 	}
