@@ -17,6 +17,8 @@
 		RadioButton
 	} from 'flowbite-svelte';
 
+	import Cookies from 'js-cookie';
+
 	let number = '';
 
 	export let data;
@@ -174,7 +176,7 @@
 				</Table>
 			</div>
 			<div>
-				<img class="ml-2" src="{data.student.pic}" alt="" />
+				<img class="ml-2 max-h-[200px]" src="{data.student.pic}" alt="" />
 			</div>
 		</div>
 
@@ -217,6 +219,16 @@
 				}}
 				class="w-3/5 whitespace-nowrap"
 				color="green">Prospectus</Button
+			>
+			<Button
+				on:click={() => {
+					Cookies.remove("pin");
+					Cookies.remove("serial");
+
+					window.open('/placement', '_self');
+				}}
+				class="w-3/5 whitespace-nowrap"
+				color="green">Logout</Button
 			>
 		</div>
 	</div>

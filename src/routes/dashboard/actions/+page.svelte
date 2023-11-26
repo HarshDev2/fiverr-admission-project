@@ -86,6 +86,7 @@
 					aggregate: data[i].Aggregate,
 					name: data[i].Name,
 					index: data[i].Index,
+					gender: data[i].Gender,
 					programme: data[i].Programme,
 					status: data[i].Status,
 					track: data[i].Track,

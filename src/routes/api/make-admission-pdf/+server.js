@@ -29,7 +29,13 @@ export async function POST({ request }) {
 		const imgResponse = await fetch(imgUrl);
 		const imgBytes = await imgResponse.arrayBuffer();
 
-		const image = await pdfDoc.embedPng(imgBytes);
+		let image;
+
+		try {
+			image = await pdfDoc.embedPng(imgBytes);
+		} catch (e) {
+			image = await pdfDoc.embedJpg(imgBytes);
+		}
 
 		// Position and dimensions for the image
 		const imageX = 420; // Adjust as needed
@@ -48,7 +54,7 @@ export async function POST({ request }) {
 		firstPage.drawText(student.name, {
 			x: 170,
 			y: 611,
-			size: 11,
+			size: student.name.length > 15 ? 9 : 11,
 			color: rgb(0, 0, 0)
 		});
 

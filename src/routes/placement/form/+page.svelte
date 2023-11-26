@@ -31,10 +31,30 @@
 
 	let color = 'green';
 
+	
+	
+	export let data;
+	
+	let selectedHouse = "";
+	
+	for(let i = 0; i < data.houses.length; i++){
+		let house = data.houses[i];
+		data.student.gender = data.student.gender.toLowerCase();
+
+		if(data.student.gender == house.gender){
+			if(house.noOfStudents < parseInt(house.capacity)){
+				selectedHouse = house;
+				break;
+			}
+		}
+		
+	}
+	
 	let formData = {
 		pic: undefined,
 		haveMedicalCondition: undefined,
 		dob: undefined,
+		house: selectedHouse.name,
 		admissionDate: new Date().toISOString().slice(0, 10),
 		admissionNumber: 'PSHS/23',
 		guardian: {
@@ -42,7 +62,7 @@
 		}
 	};
 
-	export let data;
+	console.log(selectedHouse)
 
 	let classesForSelect = [];
 
@@ -97,8 +117,7 @@
 				return;
 			}
 
-			let admissionNumber = 'PSHS/23' + Math.floor(1000 + Math.random() * 9000);
-
+			
 			let image = await readFileAsArrayBuffer(formData.pic[0]);
 			const storageRef = ref(storage, `students_pics/${Date.now() + formData.pic[0].name}`);
 			try {
@@ -128,16 +147,29 @@
 	
 				formData.medicalCondition = downloadURL2;
 			}
-
+			
 			formData.pic = downloadURL;
-
+			
+			let schoolDetailsDoc = await getDoc(doc(db, "school", "details"));
+			let schoolDetails = schoolDetailsDoc.data();
+			
+			let admissionNumber = 'PSHS/23' + schoolDetails.admissionNumber + 1;
+			
 			await updateDoc(doc(db, 'students', data.student.id), {
 				...formData,
+				house: selectedHouse.id,
 				formFilled: true,
 				admissionNumber
 			});
 
-			window.open('/placement/details');
+			await updateDoc(doc(db, 'school', 'details'), {
+				admissionNumber: schoolDetails.admissionNumber + 1
+			});
+
+			window.open('/placement/details', '_self');
+			setTimeout(() => {
+				window.close();
+			}, 1000);
 		}
 	}
 </script>

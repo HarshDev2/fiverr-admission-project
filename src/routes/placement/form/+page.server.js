@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { getDocs, query, collection, where } from 'firebase/firestore';
+import { getDocs, query, collection, where, getDoc } from 'firebase/firestore';
 import { db } from '$lib/firebase.js';
 
 export async function load({ params, url }) {
@@ -12,8 +12,6 @@ export async function load({ params, url }) {
 
 	if (!serial || !pin) throw redirect(302, '/placement');
 
-	console.log(serial, pin);
-
 	let serialDoc = await getDocs(query(collection(db, 'students'), where('serial', '==', serial), where('pin', '==', pin)));
 
     if(serialDoc.empty){
@@ -21,6 +19,10 @@ export async function load({ params, url }) {
 	} else {
 		student = serialDoc.docs[0].data();
 		student.id = serialDoc.docs[0].id;
+
+		if(student.formFilled) {
+			throw redirect(302, `/placement/details`);
+		}
 	}
 
 	let classDocs = await getDocs(collection(db, 'classes'));
@@ -40,6 +42,12 @@ export async function load({ params, url }) {
 	houseDocs.forEach((doc) => {
 		houses.push(doc.data());
 	});
+
+	for (let i = 0; i < houses.length; i++) {
+		let house = houses[i];
+		let students = await getDocs(query(collection(db, "students"), where("house", "==", house.id)));
+		houses[i].noOfStudents = students.size;
+	}
 
 	return {
 		student,

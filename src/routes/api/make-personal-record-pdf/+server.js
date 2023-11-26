@@ -28,8 +28,13 @@ export async function POST({ request }) {
 		const imgResponse = await fetch(student.pic);
 		const imgBytes = await imgResponse.arrayBuffer();
 
-		// Embed the image in the PDF
-		const image = await pdfDoc.embedPng(imgBytes); // Assuming the image is a PNG
+		let image;
+
+		try {
+			image = await pdfDoc.embedPng(imgBytes);
+		} catch (e) {
+			image = await pdfDoc.embedJpg(imgBytes);
+		}
 
 		// Position and dimensions for the image
 		const imageX = 305; // Adjust as needed

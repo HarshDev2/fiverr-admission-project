@@ -208,9 +208,12 @@
 				</div>
 			</div>
 
-			<div class="border border-red-500 p-2 my-2 md:max-w-[40vw] lg:max-w-[30vw]">
-				<span>You will receive the login credentials and further information on this number.</span>
-			</div>
+			{#if !studentData.paymentCompleted}
+				<div class="border border-red-500 p-2 my-2 md:max-w-[40vw] lg:max-w-[30vw]">
+					<span>You will receive the login credentials and further information on this number.</span
+					>
+				</div>
+			{/if}
 
 			<div class="flex flex-col md:flex-row gap-1">
 				{#if !studentData.paymentCompleted}
@@ -242,10 +245,7 @@
 					>
 				{:else}
 					<a href="/placement/login">
-						<Button
-							class="w-fit mt-2 ml-2"
-							color="green">Continue Process</Button
-						>
+						<Button class="w-fit mt-2 ml-2" color="green">Continue Process</Button>
 					</a>
 				{/if}
 			</div>

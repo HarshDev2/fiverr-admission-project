@@ -22,6 +22,8 @@
 		if(adminDocs.docs.length > 0) {
 			let admin = adminDocs.docs[0].data();
 
+			console.log(admin)
+
 			Cookies.set('token', admin.token, {
 				expires: 7,
 				path: '/'

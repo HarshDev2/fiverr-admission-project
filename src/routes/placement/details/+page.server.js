@@ -10,8 +10,6 @@ export async function load({ cookies }) {
         throw redirect(302, '/placement/login');
     }
 
-    console.log("worked till here", serialNo, pin);
-
 	let studentDocs = await getDocs(
 		query(
 			collection(db, 'students'),
@@ -26,6 +24,10 @@ export async function load({ cookies }) {
 
     let student = studentDocs.docs[0].data();
     student.id = studentDocs.docs[0].id;
+
+    if(!student.formFilled) {
+        throw redirect(302, `/placement/form?pin=${student.pin}&serial=${student.serial}`);
+    }
 
     console.log(student);
 
