@@ -41,7 +41,7 @@ export async function POST({ cookies, request }) {
 				'https://sms.hubtel.com/v1/messages/send?clientsecret=ulapfgeb&clientid=gukisadt&from=PekiSHS&to=' +
 					student.guardian.phoneNumber +
 					'&content=' +
-					`Your online application payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
+					`Your online application payment was successful. Your Serial Number is ${serialNo} and your PIN is ${pin}.`
 			);
 
 		} else {
