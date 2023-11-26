@@ -124,7 +124,7 @@
 				await fetch('/api/send-message', {
 					method: 'POST',
 					body: JSON.stringify({
-						message: messageToSend,
+						content: messageToSend,
 						phoneNumber: student.guardian.phoneNumber
 					})
 				});

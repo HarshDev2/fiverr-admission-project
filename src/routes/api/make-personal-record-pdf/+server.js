@@ -20,6 +20,20 @@ export async function POST({ request }) {
 		const response = await fetch('http://localhost:5173/personal-record.pdf');
 		const existingPdfBytes = await response.arrayBuffer();
 
+		let houses = [];
+		let housesDocs = await getDocs(collection(db, 'houses'));
+		housesDocs.docs.forEach((doc) => {
+			houses.push(doc.data());
+		});
+		
+		let house1;
+	
+		houses.forEach((house) => {
+			if(house.id == student.house) {
+				house1 = house;
+			}
+		});
+
 		const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
 		const pages = pdfDoc.getPages();
