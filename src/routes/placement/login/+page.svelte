@@ -161,9 +161,9 @@
 			</svelte:fragment>
 		</Modal>
 
-		<Modal title="Invalid Number" bind:open={popupOpen} size="sm" autoclose>
+		<Modal title="Invalid Serial or Pin" bind:open={popupOpen} size="sm" autoclose>
 			<div class="text-base leading-relaxed">
-				The Index Number you entered is invalid. Please check and try again.
+				The Serial number or PIN you entered is incorrect. Please check and try again.
 			</div>
 			<svelte:fragment slot="footer">
 				<Button color="green">Confirm</Button>

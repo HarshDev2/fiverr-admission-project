@@ -120,11 +120,22 @@
 							<TableBodyCell>{data.student.nhisNumber}</TableBodyCell>
 						</TableBodyRow>
 
+						
+						<TableBodyRow>
+							<TableBodyCell>Guardian Name</TableBodyCell>
+							<TableBodyCell>{data.student.guardian.name}</TableBodyCell>
+						</TableBodyRow>
+						
+						<TableBodyRow>
+							<TableBodyCell>Relationship</TableBodyCell>
+							<TableBodyCell>{data.student.guardian.relationship}</TableBodyCell>
+						</TableBodyRow>
+						
 						<TableBodyRow>
 							<TableBodyCell>Number</TableBodyCell>
 							<TableBodyCell>{data.student.guardian.phoneNumber}</TableBodyCell>
 						</TableBodyRow>
-
+						
 						<TableBodyRow>
 							<TableBodyCell>Email</TableBodyCell>
 							<TableBodyCell>{data.student.guardian.email}</TableBodyCell>
@@ -190,14 +201,14 @@
 					makeAdmissionLetter();
 				}}
 				class="w-3/5 whitespace-nowrap"
-				color="green">Download Admission Letter</Button
+				color="green">Admission Letter</Button
 			>
 			<Button
 				on:click={() => {
 					makePersonalRecordPdf();
 				}}
 				class="w-3/5 whitespace-nowrap"
-				color="green">Download Personal Record</Button
+				color="green">Personal Record</Button
 			>
 
 			<Button
@@ -205,7 +216,7 @@
 					window.open('/prospectus.pdf', '_blank');
 				}}
 				class="w-3/5 whitespace-nowrap"
-				color="green">Download Prospectus</Button
+				color="green">Prospectus</Button
 			>
 		</div>
 	</div>

@@ -1,4 +1,6 @@
 <script>
+	import { db } from '$lib/firebase';
+	import { doc, setDoc } from 'firebase/firestore';
 	import {
 		Button,
 		Input,
@@ -15,10 +17,14 @@
 
 	let popupOpen = false;
 	let infoOpen = false;
+	let numberAddOpen = false;
+	let editNumberOpen = false;
 
 	let color = 'green';
 
 	let studentData;
+
+	let phoneNumber;
 
 	async function handlePayment() {
 		let request = await fetch('/api/make-payment', {
@@ -35,8 +41,7 @@
 		window.open(response.data.checkoutUrl, '_blank');
 	}
 
-
-	async function getStudentDetails(){
+	async function getStudentDetails() {
 		let request = await fetch('/api/get-student-details', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -46,7 +51,7 @@
 
 		let response = await request.json();
 
-		if(response.success){
+		if (response.success) {
 			studentData = response.student;
 			infoOpen = true;
 		} else {
@@ -115,6 +120,50 @@
 			</svelte:fragment>
 		</Modal>
 
+		<Modal title="Add Phone Number" bind:open={numberAddOpen} size="sm" autoclose>
+			<div class="text-base leading-relaxed">
+				<Input color="green" bind:value={phoneNumber} />
+			</div>
+			<svelte:fragment slot="footer">
+				<Button
+					on:click={async () => {
+						await setDoc(
+							doc(db, 'students', studentData.id),
+							{
+								guardian: {
+									phoneNumber
+								}
+							},
+							{ merge: true }
+						);
+					}}
+					color="green">Confirm</Button
+				>
+			</svelte:fragment>
+		</Modal>
+
+		<Modal title="Edit Phone Number" bind:open={editNumberOpen} size="sm" autoclose>
+			<div class="text-base leading-relaxed">
+				<Input color="green" bind:value={phoneNumber} />
+			</div>
+			<svelte:fragment slot="footer">
+				<Button
+					on:click={async () => {
+						await setDoc(
+							doc(db, 'students', studentData.id),
+							{
+								guardian: {
+									phoneNumber
+								}
+							},
+							{ merge: true }
+						);
+					}}
+					color="green">Confirm</Button
+				>
+			</svelte:fragment>
+		</Modal>
+
 		{#if infoOpen}
 			<div class="flex flex-row">
 				<div>
@@ -152,9 +201,34 @@
 					</Table>
 				</div>
 			</div>
-			<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
-				>Buy Admission Voucher</Button
-			>
+
+			<div class="border border-red-500 p-2 my-2 md:max-w-[40vw] lg:max-w-[30vw]">
+				<span>You will receive the login credentials and further information on this number.</span>
+			</div>
+
+			{#if !studentData.guardian || !studentData.guardian.phoneNumber}
+				<Button
+					on:click={() => {
+						numberAddOpen = true;
+					}}
+					class="w-fit mt-2 ml-2"
+					color="green">Add Phone Number</Button
+				>
+			{:else}
+			<div class="flex flex-col md:flex-row gap-1">
+				<Button
+					on:click={() => {
+						editNumberOpen = true;
+					}}
+					class="w-fit mt-2 ml-2"
+					color="green">Edit Phone Number</Button
+				>
+
+				<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
+					>Buy Admission Voucher</Button
+				>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </div>

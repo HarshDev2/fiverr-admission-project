@@ -89,15 +89,12 @@
 					programme: data[i].Programme,
 					status: data[i].Status,
 					track: data[i].Track,
-					guardian: {
-						phoneNumber: data[i].Contact
-					}
 				});
 
 				await fetch("/send-message", {
 					method: "POST",
 					body: JSON.stringify({
-						message: "Your ward has been admitted to Peki Senior High School. His/Her index number is" + data[i].Index + ". Please visit admission.pekishs.com/placement to continue the admission process.",
+						message: "Your ward has been admitted to Peki Senior High School. His/Her index number is" + data[i].Index + ". Please visit https://admission.pekishs.com/placement to continue the admission process.",
 						phoneNumber: data[i].Contact
 					})
 				})
