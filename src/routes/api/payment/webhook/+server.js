@@ -37,10 +37,10 @@ export async function POST({ cookies, request }) {
 				serial: serialNo
 			});
 
-			await fetch(url.origin + "/api/send-message", {
+			await fetch("https://admission.pekishs.com/api/send-message", {
 				method: "POST",
 				body: JSON.stringify({
-					phoneNumber: student.guardian.phoneNumber,
+					phoneNumber: student.guardian.phoneNumber.toString(),
 					message: `Your admission fee payment was successful. Your PIN is ${pin} and your serial number is ${serialNo}.`
 				})
 			});

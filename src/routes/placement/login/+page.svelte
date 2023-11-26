@@ -68,12 +68,17 @@
 	let index = '';
 
 	async function sendPinAndSerial() {
+		console.log(index)
 		let studentDocs = await getDocs(
 			query(collection(db, 'students'), where('index', '==', index.toString()))
 		);
 
+		console.log(studentDocs.docs.length)
+
 		if (!studentDocs.empty) {
 			let student = studentDocs.docs[0].data();
+
+			console.log(student);
 
 			if (student.pin && student.serial && student.guardian && student.guardian.phoneNumber) {
 				await fetch('/api/send-message', {
@@ -137,7 +142,6 @@
 			<div class="mt-6 w-full flex flex-col items-center gap-2">
 				<Button
 					on:click={() => {
-						sendPinAndSerial();
 						restorePopupOpen = true;
 					}}
 					class="w-3/5"
@@ -160,7 +164,7 @@
 				<Input bind:value={index} color={'green'} />
 			</div>
 			<svelte:fragment slot="footer">
-				<Button color="green">Confirm</Button>
+				<Button on:click={() => sendPinAndSerial()} color="green">Confirm</Button>
 			</svelte:fragment>
 		</Modal>
 
