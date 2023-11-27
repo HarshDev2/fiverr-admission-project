@@ -2,7 +2,8 @@ import { json } from '@sveltejs/kit';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage, db } from '$lib/firebase.js';
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { getDoc, getDocs, collection, where, query, doc, updateDoc } from 'firebase/firestore';
+import { generateRandomToken } from '$utils/generateRandomToken.js';
 
 export async function POST({ request }) {
 	let data = await request.json();
@@ -33,6 +34,8 @@ export async function POST({ request }) {
 				house1 = house;
 			}
 		});
+
+		console.log(house1)
 	
 
 		const pdfDoc = await PDFDocument.load(existingPdfBytes);
@@ -110,7 +113,7 @@ export async function POST({ request }) {
 
 		// Agretatte
 
-		firstPage.drawText(house1, {
+		firstPage.drawText(house1.name, {
 			x: 170,
 			y: 520,
 			size: 11,
@@ -133,7 +136,7 @@ export async function POST({ request }) {
 
 		const pdfBytes = await pdfDoc.save();
 
-		let storageRef = ref(storage, 'admissions/' + 'output.pdf');
+		let storageRef = ref(storage, 'admissions/' + generateRandomToken(24) + ".pdf");
 
 		await uploadBytes(storageRef, pdfBytes).then((snapshot) => {
 			console.log('Uploaded a blob or file!');

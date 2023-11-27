@@ -130,7 +130,7 @@
 						
 						<TableBodyRow>
 							<TableBodyCell>Relationship</TableBodyCell>
-							<TableBodyCell>{data.student.guardian.relationship}</TableBodyCell>
+							<TableBodyCell>{data.student.guardian.relation}</TableBodyCell>
 						</TableBodyRow>
 						
 						<TableBodyRow>
