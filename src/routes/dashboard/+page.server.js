@@ -6,7 +6,9 @@ export async function load(){
 
     let studentDocs = await getDocs(collection(db, "students"));
     studentDocs.forEach((doc) => {
-        students.push(doc.data());
+        let student = doc.data();
+        student.id = doc.id;
+        students.push(student);
     });
 
     let counts = {

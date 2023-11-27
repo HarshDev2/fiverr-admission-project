@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, collection } from 'firebase/firestore';
+	import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, where } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -33,6 +33,9 @@
 	let addHouseModalOpened = false;
 	let editStudentOpened = false;
 
+	let deleteHouseOpened = false;
+	let selectedHouse = {};
+
 	let newHouseDetails = {};
 	let editStudentDetails = {};
 
@@ -43,6 +46,16 @@
 		});
 
 		addHouseModalOpened = false;
+	}
+
+	async function deleteHouse(){
+		let houseDoc = await getDocs(collection(db, 'houses'), where('id', '==', selectedHouse.id));
+		if (!houseDoc.empty){
+			await deleteDoc(doc(db, 'houses', houseDoc.docs[0].id));
+		}
+
+		selectedHouse = {};
+		deleteHouseOpened = false;
 	}
 </script>
 
@@ -113,97 +126,17 @@
 			</div>
 		</Modal>
 
-		<Modal bind:open={editStudentOpened} size="xs" autoclose={false} class="w-full">
+		<Modal bind:open={deleteHouseOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
-				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
-				<Label class="space-y-2">
-					<span>Full Name</span>
-					<Input
-						bind:value={newHouseDetails.name}
-						color={'green'}
-						type="text"
-						name="name"
-						placeholder="E.g. Ama Serwaa"
-						required
-					/>
-				</Label>
-				<Label class="space-y-2">
-					<span>Gender</span>
-					<Select
-						bind:value={newHouseDetails.gender}
-						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-						items={[
-							{ value: 'male', name: 'Male' },
-							{ value: 'female', name: 'Female' },
-							{ value: 'other', name: 'Other' }
-						]}
-					/>
-				</Label>
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete House</h3>
 
-				<Label class="space-y-2">
-					<span>Index Number</span>
-					<Input
-						bind:value={newHouseDetails.index}
-						color={'green'}
-						type="text"
-						name="Index Number"
-						placeholder="E.g. xxxxxxxxxx23"
-						required
-					/>
-				</Label>
+				<span>Are you sure you want to delete the house named "{selectedHouse.name}"</span>
 
-				<Label class="space-y-2">
-					<span>Aggregate</span>
-					<Input
-						bind:value={newHouseDetails.aggregate}
-						color={'green'}
-						type="text"
-						name="aggregate"
-						placeholder="E.g. xx"
-						required
-					/>
-				</Label>
-
-				<Label class="space-y-2">
-					<span>Programme</span>
-					<Input
-						bind:value={newHouseDetails.programme}
-						color={'green'}
-						type="text"
-						name="programme"
-						placeholder="E.g. General Arts"
-						required
-					/>
-				</Label>
-
-				<Label class="space-y-2">
-					<span>Track</span>
-					<Input
-						bind:value={newHouseDetails.track}
-						color={'green'}
-						type="text"
-						name="track"
-						placeholder="E.g. Single"
-						required
-					/>
-				</Label>
-
-				<Label class="space-y-2">
-					<span>Status</span>
-					<Input
-						bind:value={newHouseDetails.status}
-						color={'green'}
-						type="text"
-						name="status"
-						placeholder="E.g. Day"
-						required
-					/>
-				</Label>
-
-				<Button on:click={createSchoolStudent} color="green" type="submit" class="w-full1"
-					>Confirm</Button
-				>
 			</div>
+			<svelte:fragment slot="footer">
+				<Button color="red" on:click={deleteHouse}>Yeah</Button>
+				<Button color="alternative">Decline</Button>
+			  </svelte:fragment>
 		</Modal>
 
 		<Table divClass="mt-4" hoverable={true}>
@@ -229,8 +162,8 @@
 						<TableBodyCell>
 							<button
 								on:click={() => {
-									editStudentOpened = true;
-									editStudentDetails = student;
+									selectedHouse = student;
+									deleteHouseOpened = true;
 								}}
 								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
 							>

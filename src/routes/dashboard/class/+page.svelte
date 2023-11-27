@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, collection } from 'firebase/firestore';
+	import { addDoc, deleteDoc, getDocs, where, doc, collection } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -83,9 +83,12 @@
 
 	let addClassModalOpened = false;
 	let editStudentOpened = false;
+	let deleteClassOpened = false;
 
 	let newClassDetails = {};
 	let editStudentDetails = {};
+
+	let selectedClass = {};
 
 	async function createClass() {
 		await addDoc(collection(db, 'classes'), {
@@ -94,6 +97,16 @@
 		});
 
 		addClassModalOpened = false;
+	}
+
+	async function deleteClass(){
+		let classDoc = await getDocs(collection(db, 'classes'), where('id', '==', selectedClass.id));
+		if (!classDoc.empty){
+			await deleteDoc(doc(db, 'classes', classDoc.docs[0].id));
+		}
+
+		selectedClass = {};
+		deleteClassOpened = false;
 	}
 </script>
 
@@ -174,97 +187,17 @@
 			</div>
 		</Modal>
 
-		<Modal bind:open={editStudentOpened} size="xs" autoclose={false} class="w-full">
+		<Modal bind:open={deleteClassOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
-				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
-				<Label class="space-y-2">
-					<span>Full Name</span>
-					<Input
-						bind:value={newClassDetails.name}
-						color={'green'}
-						type="text"
-						name="name"
-						placeholder="E.g. Ama Serwaa"
-						required
-					/>
-				</Label>
-				<Label class="space-y-2">
-					<span>Gender</span>
-					<Select
-						bind:value={newClassDetails.gender}
-						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-						items={[
-							{ value: 'male', name: 'Male' },
-							{ value: 'female', name: 'Female' },
-							{ value: 'other', name: 'Other' }
-						]}
-					/>
-				</Label>
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete Class</h3>
 
-				<Label class="space-y-2">
-					<span>Index Number</span>
-					<Input
-						bind:value={newClassDetails.index}
-						color={'green'}
-						type="text"
-						name="Index Number"
-						placeholder="E.g. xxxxxxxxxx23"
-						required
-					/>
-				</Label>
+				<span>Are you sure you want to delete the class named "{selectedClass.name}"</span>
 
-				<Label class="space-y-2">
-					<span>Aggregate</span>
-					<Input
-						bind:value={newClassDetails.aggregate}
-						color={'green'}
-						type="text"
-						name="aggregate"
-						placeholder="E.g. xx"
-						required
-					/>
-				</Label>
-
-				<Label class="space-y-2">
-					<span>Programme</span>
-					<Input
-						bind:value={newClassDetails.programme}
-						color={'green'}
-						type="text"
-						name="programme"
-						placeholder="E.g. General Arts"
-						required
-					/>
-				</Label>
-
-				<Label class="space-y-2">
-					<span>Track</span>
-					<Input
-						bind:value={newClassDetails.track}
-						color={'green'}
-						type="text"
-						name="track"
-						placeholder="E.g. Single"
-						required
-					/>
-				</Label>
-
-				<Label class="space-y-2">
-					<span>Status</span>
-					<Input
-						bind:value={newClassDetails.status}
-						color={'green'}
-						type="text"
-						name="status"
-						placeholder="E.g. Day"
-						required
-					/>
-				</Label>
-
-				<Button on:click={createSchoolStudent} color="green" type="submit" class="w-full1"
-					>Confirm</Button
-				>
 			</div>
+			<svelte:fragment slot="footer">
+				<Button color="red" on:click={deleteClass}>Yeah</Button>
+				<Button color="alternative">Decline</Button>
+			  </svelte:fragment>
 		</Modal>
 
 		<Table divClass="mt-4" hoverable={true}>
@@ -292,8 +225,8 @@
 						<TableBodyCell>
 							<button
 								on:click={() => {
-									editStudentOpened = true;
-									editStudentDetails = student;
+									deleteClassOpened = true;
+									selectedClass = student;
 								}}
 								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
 							>

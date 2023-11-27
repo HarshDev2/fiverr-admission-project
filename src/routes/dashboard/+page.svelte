@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, collection } from 'firebase/firestore';
+	import { addDoc, collection, deleteDoc, doc, getDoc } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -74,7 +74,9 @@
 
 	let addStudentModalOpened = false;
 	let editStudentOpened = false;
+	let deleteStudentOpened = false;
 
+	let selectedStudent = {};
 	let newStudentDetails = {};
 	let editStudentDetails = {};
 
@@ -86,6 +88,17 @@
 		});
 
 		addStudentModalOpened = false;
+	}
+
+	async function deleteStudent(){
+		console.log(selectedStudent);
+		let studentDoc = await getDoc(doc(db, 'students', selectedStudent.id));
+		if (studentDoc.exists()){
+			await deleteDoc(doc(db, 'students', studentDoc.id));
+		}
+
+		selectedStudent = {};
+		deleteStudentOpened = false;
 	}
 </script>
 
@@ -213,6 +226,19 @@
 			</div>
 		</Modal>
 
+		<Modal bind:open={deleteStudentOpened} size="xs" autoclose={false} class="w-full">
+			<div class="flex flex-col space-y-6" action="#">
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete Programme</h3>
+
+				<span>Are you sure you want to delete the student named "{selectedStudent.name}"</span>
+
+			</div>
+			<svelte:fragment slot="footer">
+				<Button color="red" on:click={deleteStudent}>Yeah</Button>
+				<Button color="alternative">Decline</Button>
+			  </svelte:fragment>
+		</Modal>
+
 		<Modal bind:open={editStudentOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
@@ -332,6 +358,17 @@
 								}}
 
 								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
+							>
+						</TableBodyCell>
+
+						<TableBodyCell>
+							<button
+								on:click={() => {
+									deleteStudentOpened = true;
+									selectedStudent = student;
+								}}
+
+								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
 							>
 						</TableBodyCell>
 					</TableBodyRow>
