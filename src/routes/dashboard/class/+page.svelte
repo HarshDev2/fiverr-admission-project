@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, deleteDoc, getDocs, where, doc, collection } from 'firebase/firestore';
+	import { addDoc, deleteDoc, getDocs, updateDoc, where, doc, collection } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -82,7 +82,7 @@
 	);
 
 	let addClassModalOpened = false;
-	let editStudentOpened = false;
+	let editClassOpened = false;
 	let deleteClassOpened = false;
 
 	let newClassDetails = {};
@@ -107,6 +107,19 @@
 
 		selectedClass = {};
 		deleteClassOpened = false;
+	}
+
+	async function updateClass(){
+		await updateDoc(doc(db, 'classes', selectedClass._id), {
+			id: selectedClass.id,
+			name: selectedClass.name,
+			shortName: selectedClass.shortName,
+			programme: selectedClass.programme,
+			capacity: selectedClass.capacity,
+		});
+
+		selectedClass = {};
+		editClassOpened = false;
 	}
 </script>
 
@@ -187,6 +200,71 @@
 			</div>
 		</Modal>
 
+		<Modal bind:open={editClassOpened} size="xs" autoclose={false} class="w-full">
+			<div class="flex flex-col space-y-6" action="#">
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Class</h3>
+				<Label class="space-y-2">
+					<span>Class Id</span>
+					<Input
+						bind:value={selectedClass.id}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. 12"
+						required
+					/>
+				</Label>
+				<Label class="space-y-2">
+					<span>Class Name</span>
+					<Input
+						bind:value={selectedClass.name}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. Optical Physics"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Short Name</span>
+					<Input
+						bind:value={selectedClass.shortName}
+						color={'green'}
+						type="text"
+						name="Short Name"
+						placeholder="E.g. Physics"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Programme</span>
+					<Select
+						bind:value={selectedClass.programme}
+						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+						items={programmesForSelect}
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Class Capacity</span>
+					<Input
+						bind:value={selectedClass.capacity}
+						color={'green'}
+						type="number"
+						name="Class Capacity"
+						placeholder="E.g. 23"
+						required
+					/>
+				</Label>
+
+				<Button on:click={updateClass} color="green" type="submit" class="w-full1"
+					>Confirm</Button
+				>
+			</div>
+		</Modal>
+
 		<Modal bind:open={deleteClassOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete Class</h3>
@@ -222,6 +300,16 @@
 						<TableBodyCell>{student.programme}</TableBodyCell>
 						<TableBodyCell>{student.capacity}</TableBodyCell>
 						<TableBodyCell>{student.noOfStudents}</TableBodyCell>
+						<TableBodyCell>
+							<button
+								on:click={() => {
+									editClassOpened = true;
+									selectedClass = student;
+								}}
+
+								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
+							>
+						</TableBodyCell>
 						<TableBodyCell>
 							<button
 								on:click={() => {

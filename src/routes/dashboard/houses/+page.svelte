@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, where } from 'firebase/firestore';
+	import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, where } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -31,7 +31,7 @@
 	export let data;
 
 	let addHouseModalOpened = false;
-	let editStudentOpened = false;
+	let editHouseOpened = false;
 
 	let deleteHouseOpened = false;
 	let selectedHouse = {};
@@ -56,6 +56,18 @@
 
 		selectedHouse = {};
 		deleteHouseOpened = false;
+	}
+
+	async function updateHouse(){
+		await updateDoc(doc(db, 'houses', selectedHouse._id), {
+			id: selectedHouse.id,
+			name: selectedHouse.name,
+			capacity: selectedHouse.capacity,
+			gender: selectedHouse.gender
+		});
+
+		selectedHouse = {};
+		editHouseOpened = false;
 	}
 </script>
 
@@ -126,6 +138,61 @@
 			</div>
 		</Modal>
 
+		<Modal bind:open={editHouseOpened} size="xs" autoclose={false} class="w-full">
+			<div class="flex flex-col space-y-6" action="#">
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Class</h3>
+				<Label class="space-y-2">
+					<span>House Id</span>
+					<Input
+						bind:value={selectedHouse.id}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. 12"
+						required
+					/>
+				</Label>
+				<Label class="space-y-2">
+					<span>House Name</span>
+					<Input
+						bind:value={selectedHouse.name}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. Optical Physics"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Gender</span>
+					<Select
+						bind:value={selectedHouse.gender}
+						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+						items={[
+							{ value: 'male', name: 'Male' },
+							{ value: 'female', name: 'Female' },
+							{ value: 'other', name: 'Other' }
+						]}
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>House Capacity</span>
+					<Input
+						bind:value={selectedHouse.capacity}
+						color={'green'}
+						type="number"
+						name="House Capacity"
+						placeholder="E.g. 23"
+						required
+					/>
+				</Label>
+
+				<Button on:click={updateHouse} color="green" type="submit" class="w-full1">Confirm</Button>
+			</div>
+		</Modal>
+
 		<Modal bind:open={deleteHouseOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete House</h3>
@@ -159,6 +226,16 @@
 						<TableBodyCell>{student.gender}</TableBodyCell>
 						<TableBodyCell>{student.capacity}</TableBodyCell>
 						<TableBodyCell>{student.noOfStudents}</TableBodyCell>
+						<TableBodyCell>
+							<button
+								on:click={() => {
+									editHouseOpened = true;
+									selectedHouse = student;
+								}}
+
+								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
+							>
+						</TableBodyCell>
 						<TableBodyCell>
 							<button
 								on:click={() => {

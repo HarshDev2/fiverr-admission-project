@@ -9,6 +9,7 @@ export async function load(){
     let classDocs = await getDocs(collection(db, "classes"));
     for (let i = 0; i < classDocs.size; i++) {
         let schoolClass = classDocs.docs[i].data();
+        schoolClass._id = classDocs.docs[i].id;
         
         let students = await getDocs(query(collection(db, "students"), where("class", "==", schoolClass.id)));
         schoolClass.noOfStudents = students.size;

@@ -10,6 +10,7 @@ export async function load() {
 
 	for (let i = 0; i < houseDocs.size; i++) {
 		let house = houseDocs.docs[i].data();
+		house._id = houseDocs.docs[i].id;
 
 		let students = await getDocs(query(collection(db, 'students'), where('house', '==', house.id)));
 		house.noOfStudents = students.size;

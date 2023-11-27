@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, deleteDoc, getDocs, where, doc, collection } from 'firebase/firestore';
+	import { addDoc, deleteDoc, getDocs, where, doc, collection, updateDoc } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -73,7 +73,7 @@
 	);
 
 	let addProgrammeModalOpened = false;
-	let editStudentOpened = false;
+	let editProgrammeOpened = false;
 
 	let selectedProgramme = {};
 	let deleteProgrammeOpened = false;
@@ -98,6 +98,17 @@
 
 		selectedProgramme = {};
 		deleteProgrammeOpened = false;
+	}
+
+	async function updateProgramme(){
+		await updateDoc(doc(db, 'programmes', selectedProgramme._id), {
+			id: selectedProgramme.id,
+			name: selectedProgramme.name,
+			shortName: selectedProgramme.shortName
+		});
+
+		selectedProgramme = {};
+		editProgrammeOpened = false;
 	}
 </script>
 
@@ -157,6 +168,50 @@
 			</div>
 		</Modal>
 
+		<Modal bind:open={editProgrammeOpened} size="xs" autoclose={false} class="w-full">
+			<div class="flex flex-col space-y-6" action="#">
+				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Programme</h3>
+				<Label class="space-y-2">
+					<span>Programme Id</span>
+					<Input
+						bind:value={selectedProgramme.id}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. 12"
+						required
+					/>
+				</Label>
+				<Label class="space-y-2">
+					<span>Programme Name</span>
+					<Input
+						bind:value={selectedProgramme.name}
+						color={'green'}
+						type="text"
+						name="name"
+						placeholder="E.g. General Arts"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Short Name</span>
+					<Input
+						bind:value={selectedProgramme.shortName}
+						color={'green'}
+						type="text"
+						name="Index Number"
+						placeholder="E.g. Arts"
+						required
+					/>
+				</Label>
+
+				<Button on:click={updateProgramme} color="green" type="submit" class="w-full1"
+					>Confirm</Button
+				>
+			</div>
+		</Modal>
+
 		<Modal bind:open={deleteProgrammeOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete Programme</h3>
@@ -188,6 +243,16 @@
 						<TableBodyCell>{student.name}</TableBodyCell>
 						<TableBodyCell>{student.shortName}</TableBodyCell>
 						<TableBodyCell>{student.noOfStudents}</TableBodyCell>
+						<TableBodyCell>
+							<button
+								on:click={() => {
+									editProgrammeOpened = true;
+									selectedProgramme = student;
+								}}
+
+								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
+							>
+						</TableBodyCell>
 						<TableBodyCell>
 							<button
 								on:click={() => {
