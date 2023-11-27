@@ -1,6 +1,6 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, collection, deleteDoc, doc, getDoc } from 'firebase/firestore';
+	import { addDoc, collection, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -99,6 +99,15 @@
 
 		selectedStudent = {};
 		deleteStudentOpened = false;
+	}
+
+	async function updateStudent(){
+		await updateDoc(doc(db, 'students', selectedStudent.id), {
+			...selectedStudent
+		});
+
+		selectedStudent = {};
+		editStudentOpened = false;
 	}
 </script>
 
@@ -245,7 +254,7 @@
 				<Label class="space-y-2">
 					<span>Full Name</span>
 					<Input
-						bind:value={newStudentDetails.name}
+						bind:value={selectedStudent.name}
 						color={'green'}
 						type="text"
 						name="name"
@@ -256,7 +265,7 @@
 				<Label class="space-y-2">
 					<span>Gender</span>
 					<Select
-						bind:value={newStudentDetails.gender}
+						bind:value={selectedStudent.gender}
 						defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
 						items={[
 							{ value: 'male', name: 'Male' },
@@ -269,7 +278,7 @@
 				<Label class="space-y-2">
 					<span>Index Number</span>
 					<Input
-						bind:value={newStudentDetails.index}
+						bind:value={selectedStudent.index}
 						color={'green'}
 						type="text"
 						name="Index Number"
@@ -281,7 +290,7 @@
 				<Label class="space-y-2">
 					<span>Aggregate</span>
 					<Input
-						bind:value={newStudentDetails.aggregate}
+						bind:value={selectedStudent.aggregate}
 						color={'green'}
 						type="text"
 						name="aggregate"
@@ -293,7 +302,7 @@
 				<Label class="space-y-2">
 					<span>Programme</span>
 					<Input
-						bind:value={newStudentDetails.programme}
+						bind:value={selectedStudent.programme}
 						color={'green'}
 						type="text"
 						name="programme"
@@ -305,7 +314,7 @@
 				<Label class="space-y-2">
 					<span>Track</span>
 					<Input
-						bind:value={newStudentDetails.track}
+						bind:value={selectedStudent.track}
 						color={'green'}
 						type="text"
 						name="track"
@@ -317,7 +326,7 @@
 				<Label class="space-y-2">
 					<span>Status</span>
 					<Input
-						bind:value={newStudentDetails.status}
+						bind:value={selectedStudent.status}
 						color={'green'}
 						type="text"
 						name="status"
@@ -326,7 +335,7 @@
 					/>
 				</Label>
 
-				<Button on:click={createSchoolStudent} color="green" type="submit" class="w-full1"
+				<Button on:click={updateStudent} color="green" type="submit" class="w-full1"
 					>Confirm</Button
 				>
 			</div>
@@ -354,7 +363,8 @@
 							<button
 								on:click={() => {
 									editStudentOpened = true;
-									editStudentDetails = student;
+									selectedStudent = student;
+									selectedStudent.gender = selectedStudent.gender.toLowerCase();
 								}}
 
 								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
