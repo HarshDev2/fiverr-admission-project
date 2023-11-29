@@ -90,28 +90,28 @@
 			return;
 		}
 
-		if (
-			!formData.dob ||
-			!formData.pic ||
-			!formData.email ||
-			formData.haveMedicalCondition === undefined ||
-			(formData.haveMedicalCondition && !formData.medicalCondition) ||
-			!formData.beceYear ||
-			!formData.schoolType ||
-			!formData.previousJHS ||
-			!formData.religion ||
-			!formData.homeTown ||
-			!formData.presentAddress ||
-			!formData.guardian.name ||
-			!formData.guardian.relation ||
-			!formData.guardian.occupation ||
-			!formData.guardian.phoneNumber ||
-			!formData.guardian.email
-		) {
-			error = 'Please enter all of the required fields.';
-			errorModalShown = true;
-			return;
-		} else {
+		// if (
+		// 	!formData.dob ||
+		// 	!formData.pic ||
+		// 	!formData.email ||
+		// 	formData.haveMedicalCondition === undefined ||
+		// 	(formData.haveMedicalCondition && !formData.medicalCondition) ||
+		// 	!formData.beceYear ||
+		// 	!formData.schoolType ||
+		// 	!formData.previousJHS ||
+		// 	!formData.religion ||
+		// 	!formData.homeTown ||
+		// 	!formData.presentAddress ||
+		// 	!formData.guardian.name ||
+		// 	!formData.guardian.relation ||
+		// 	!formData.guardian.occupation ||
+		// 	!formData.guardian.phoneNumber ||
+		// 	!formData.guardian.email
+		// ) {
+		// 	error = 'Please enter all of the required fields.';
+		// 	errorModalShown = true;
+		// 	return;
+		// } else {
 			if (formData.pic[0].type !== 'image/jpeg' && formData.pic[0].type !== 'image/png') {
 				error = 'Please upload a png/jpeg file only.';
 				errorModalShown = true;
@@ -171,7 +171,7 @@
 			setTimeout(() => {
 				window.close();
 			}, 1000);
-		}
+		// }
 	}
 </script>
 
