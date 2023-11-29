@@ -57,6 +57,7 @@
 		house: selectedHouse.name,
 		admissionDate: new Date().toISOString().slice(0, 10),
 		admissionNumber: 'PSHS/23',
+		enrollmentCode: null,
 		guardian: {
 			name: undefined
 		}
@@ -93,6 +94,7 @@
 			!formData.dob ||
 			!formData.pic ||
 			!formData.email ||
+			!formData.enrollmentCode ||
 			formData.haveMedicalCondition === undefined ||
 			(formData.haveMedicalCondition && !formData.medicalCondition) ||
 			!formData.beceYear ||
@@ -265,6 +267,17 @@
 					disabled
 					value={formData.admissionNumber}
 					name="admissionNumber"
+				/>
+			</Label>
+
+			<!-- Enrollment Number -->
+			<Label class="space-y-2 flex flex-col gap-2">
+				Enrollment Code*
+				<input
+					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+					type="text"
+					value={formData.enrollmentCode}
+					name="enrollmentCode"
 				/>
 			</Label>
 
