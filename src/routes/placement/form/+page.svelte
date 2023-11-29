@@ -94,7 +94,6 @@
 			!formData.dob ||
 			!formData.pic ||
 			!formData.email ||
-			!formData.enrollmentCode ||
 			formData.haveMedicalCondition === undefined ||
 			(formData.haveMedicalCondition && !formData.medicalCondition) ||
 			!formData.beceYear ||

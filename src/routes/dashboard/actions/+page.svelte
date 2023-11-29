@@ -82,23 +82,35 @@
 					data[i].Track
 				);
 
-				await addDoc(collection(db, 'students'), {
-					aggregate: data[i].Aggregate,
-					name: data[i].Name,
-					index: data[i].Index,
-					gender: data[i].Gender,
-					programme: data[i].Programme,
-					status: data[i].Status,
-					track: data[i].Track,
-				});
+				let studentDocs = await getDocs(
+					query(collection(db, 'students'), where('index', '==', data[i].Index))
+				);
 
-				await fetch("/send-message", {
-					method: "POST",
-					body: JSON.stringify({
-						message: "Your ward has been admitted to Peki Senior High School. His/Her index number is" + data[i].Index + ". Please visit https://admission.pekishs.com/placement to continue the admission process.",
-						phoneNumber: data[i].Contact
-					})
-				})
+				// if (studentDocs.empty) {
+					await addDoc(collection(db, 'students'), {
+						aggregate: data[i].Aggregate,
+						name: data[i].Name,
+						index: data[i].Index,
+						gender: data[i].Gender,
+						programme: data[i].Programme,
+						status: data[i].Status,
+						track: data[i].Track
+					});
+
+					await fetch('/send-message', {
+						method: 'POST',
+						body: JSON.stringify({
+							message:
+								'Your ward has been admitted to Peki Senior High School. His/Her index number is' +
+								data[i].Index +
+								'. Please visit https://admission.pekishs.com/placement to continue the admission process.',
+							phoneNumber: data[i].Contact
+						})
+					});
+				// } 
+				// else {
+				// 	console.log('Student already exists');
+				// }
 			}
 		};
 
