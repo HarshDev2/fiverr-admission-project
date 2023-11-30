@@ -103,12 +103,14 @@ export async function POST({ request }) {
 			color: rgb(0, 0, 0)
 		});
 
-		firstPage.drawText(class1.name, {
-			x: 170,
-			y: 565,
-			size: 11,
-			color: rgb(0, 0, 0)
-		});
+		if(class1){
+			firstPage.drawText(class1.name, {
+				x: 170,
+				y: 565,
+				size: 11,
+				color: rgb(0, 0, 0)
+			});
+		}
 
 		firstPage.drawText(student.gender, {
 			x: 170,

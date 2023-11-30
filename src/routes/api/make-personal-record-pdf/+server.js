@@ -119,13 +119,14 @@ export async function POST({ request }) {
 		values.forEach((value, index) => {
 			if(!value) {
 				console.log(index)
+			} else {
+				firstPage.drawText(value.toString(), {
+					x: 260,
+					y: 551 - index * 15.2,
+					size: 11,
+					color: rgb(0, 0, 0)
+				});
 			}
-			firstPage.drawText(value.toString(), {
-				x: 260,
-				y: 551 - index * 15.2,
-				size: 11,
-				color: rgb(0, 0, 0)
-			});
 		});
 
 		const pdfBytes = await pdfDoc.save();
