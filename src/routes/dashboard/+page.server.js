@@ -21,11 +21,11 @@ export async function load(){
     counts.totalStudents = students.length;
 
     students.forEach((student) => {
-        if(student.gender == "male"){
+        if(student.formFilled && student.gender.toLowerCase() == "male"){
             counts.maleStudents++;
-        } else if(student.gender == "female"){
+        } else if(student.formFilled && student.gender.toLowerCase() == "female"){
             counts.femaleStudents++;
-        } else if(student.gender == "other") {
+        } else if(student.formFilled && student.gender.toLowerCase() == "other") {
             counts.otherStudents++;
         }
     });

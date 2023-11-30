@@ -26,7 +26,14 @@ export async function POST({ request }) {
 		housesDocs.docs.forEach((doc) => {
 			houses.push(doc.data());
 		});
-		
+
+		let classes = [];
+		let classesDocs = await getDocs(collection(db, 'classes'));
+		classesDocs.docs.forEach((doc) => {
+			classes.push(doc.data());
+		});
+
+		let class1;
 		let house1;
 	
 		houses.forEach((house) => {
@@ -35,8 +42,14 @@ export async function POST({ request }) {
 			}
 		});
 
-		console.log(house1)
-	
+		classes.forEach((class2) => {
+			if(class2.id == student.class) {
+				class1 = class2;
+			}
+		});
+
+		console.log(house1);
+		console.log(class1);
 
 		const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
@@ -90,7 +103,7 @@ export async function POST({ request }) {
 			color: rgb(0, 0, 0)
 		});
 
-		firstPage.drawText(student.class, {
+		firstPage.drawText(class1.name, {
 			x: 170,
 			y: 565,
 			size: 11,

@@ -116,7 +116,7 @@
 		<h1 class="text-xl font-semibold mt-4 mb-2">Dashboard</h1>
 		<div class="flex flex-row gap-2">
 			<div class="flex flex-col grow gap-2 bg-muted-background p-4 rounded-md">
-				<span class="text-sm text-gray-400 font-semibold">All Students</span>
+				<span class="text-sm text-gray-400 font-semibold">Total Applicants</span>
 				<span class="text-black text-xl font-semibold">{data.counts.totalStudents}</span>
 			</div>
 			<div class="flex flex-col grow gap-2 bg-muted-background p-4 rounded-md">

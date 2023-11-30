@@ -19,6 +19,8 @@
 	let newPassword: string;
 	let confirmPassword: string;
 
+	let studentsUploaded = false;
+
 	let errorModalOpened = false;
 	let error = '';
 
@@ -86,7 +88,7 @@
 					query(collection(db, 'students'), where('index', '==', data[i].Index))
 				);
 
-				// if (studentDocs.empty) {
+				if (studentDocs.empty) {
 					await addDoc(collection(db, 'students'), {
 						aggregate: data[i].Aggregate,
 						name: data[i].Name,
@@ -97,21 +99,27 @@
 						track: data[i].Track
 					});
 
-					await fetch('/send-message', {
+					if(data[i].Index && data[i].Contact){
+
+					await fetch('/api/send-message', {
 						method: 'POST',
 						body: JSON.stringify({
-							message:
+							content:
 								'Your ward has been admitted to Peki Senior High School. His/Her index number is' +
 								data[i].Index +
 								'. Please visit https://admission.pekishs.com/placement to continue the admission process.',
 							phoneNumber: data[i].Contact
 						})
 					});
-				// } 
-				// else {
-				// 	console.log('Student already exists');
-				// }
+				}
+				}
+				
+				else {
+					console.log('Student already exists');
+				}
+			
 			}
+			studentsUploaded = true;
 		};
 
 		reader.readAsText(file);
@@ -182,6 +190,7 @@
 		</div>
 	</div>
 </div>
+
 <Modal title="Incorrect Details" bind:open={errorModalOpened} autoclose outsideclose>
 	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{error}</p>
 	<svelte:fragment slot="footer">
@@ -194,3 +203,17 @@
 		>
 	</svelte:fragment>
 </Modal>
+
+<Modal title="Students Uploaded" bind:open={studentsUploaded} autoclose outsideclose>
+	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">Students Have been Upload Sucessfully in the database.</p>
+	<svelte:fragment slot="footer">
+		<Button
+			color={'green'}
+			on:click={() => {
+				studentsUploaded = false;
+				error = '';
+			}}>Confirm</Button
+		>
+	</svelte:fragment>
+</Modal>
+
