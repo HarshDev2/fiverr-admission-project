@@ -20,6 +20,7 @@
 	} from 'flowbite-svelte';
 
 	let searchTerm = '';
+	let searchName = undefined;
 
 	let color = 'green';
 
@@ -30,47 +31,11 @@
 
 	export let data;
 
-	let students = [
-		{
-			name: 'Kwame Nkrumah',
-			gender: Genders.male,
-			paymentStatus: true,
-			index: 1023,
-			createdAt: new Date('2023-10-01')
-		},
-		{
-			name: 'Ama Serwaa',
-			gender: Genders.female,
-			paymentStatus: false,
-			index: 1024,
-			createdAt: new Date('2023-10-02')
-		},
-		{
-			name: 'Kofi Annan',
-			gender: Genders.male,
-			paymentStatus: true,
-			index: 1025,
-			createdAt: new Date('2023-10-03')
-		},
-		{
-			name: 'Abena Osei',
-			gender: Genders.female,
-			paymentStatus: false,
-			index: 1026,
-			createdAt: new Date('2023-10-04')
-		},
-		{
-			name: 'Yaw Asamoah',
-			gender: Genders.male,
-			paymentStatus: true,
-			index: 1027,
-			createdAt: new Date('2023-10-05')
-		}
-	];
+	console.log(data.students);
 
-	$: filteredItems = students.filter(
-		(item) => item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
-	);
+	$: filteredStudents = searchName ? data.students.filter(
+		(item) => item.name.toLowerCase().indexOf(searchName.toLowerCase()) !== -1
+	) : data.students;
 
 	let addStudentModalOpened = false;
 	let editStudentOpened = false;
@@ -341,6 +306,10 @@
 			</div>
 		</Modal>
 
+		<div>
+			<input bind:value={searchName} class="rounded-md border" type="text" placeholder="Search By Name">
+		</div>
+
 		<Table divClass="mt-4" hoverable={true}>
 			<TableHead>
 				<TableHeadCell>Index Number</TableHeadCell>
@@ -353,7 +322,7 @@
 			</TableHead>
 
 			<TableBody tableBodyClass="divide-y">
-				{#each data.students as student}
+				{#each filteredStudents as student}
 					<TableBodyRow>
 						<TableBodyCell>{student.index}</TableBodyCell>
 						<TableBodyCell>{student.name}</TableBodyCell>

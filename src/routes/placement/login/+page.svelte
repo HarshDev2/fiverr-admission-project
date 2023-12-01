@@ -22,6 +22,7 @@
 	let popupOpen = false;
 	let restorePopupOpen = false;
 	let infoOpen = false;
+	let serialPinSent = false;
 
 	let color = 'green';
 
@@ -89,6 +90,7 @@
 							student.pin
 					})
 				});
+				serialPinSent = true;
 			}
 		}
 	}
@@ -168,6 +170,15 @@
 		<Modal title="Invalid Serial or Pin" bind:open={popupOpen} size="sm" autoclose>
 			<div class="text-base leading-relaxed">
 				The Serial number or PIN you entered is incorrect. Please check and try again.
+			</div>
+			<svelte:fragment slot="footer">
+				<Button color="green">Confirm</Button>
+			</svelte:fragment>
+		</Modal>
+
+		<Modal title="Serial/Pin Sent" bind:open={serialPinSent} size="sm" autoclose>
+			<div class="text-base leading-relaxed">
+				Your serial number and pin has been sent to your phone number.
 			</div>
 			<svelte:fragment slot="footer">
 				<Button color="green">Confirm</Button>
