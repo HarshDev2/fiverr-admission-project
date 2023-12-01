@@ -37,7 +37,7 @@
 	
 	let selectedHouse = "";
 
-	// console.log(data.houses.sort((a, b) => a.noOfStudents - b.noOfStudents));
+	data.houses = data.houses.sort((a, b) => a.noOfStudents - b.noOfStudents);
 	
 	for(let i = 0; i < data.houses.length; i++){
 		let house = data.houses[i];
