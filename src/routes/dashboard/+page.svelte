@@ -376,6 +376,7 @@
 		<Table divClass="mt-4" hoverable={true}>
 			<TableHead>
 				<TableHeadCell>Index Number</TableHeadCell>
+				<TableHeadCell>Enrollment Code</TableHeadCell>
 				<TableHeadCell>Student Name</TableHeadCell>
 				<TableHeadCell>Gender</TableHeadCell>
 				<TableHeadCell>Payment Status</TableHeadCell>
