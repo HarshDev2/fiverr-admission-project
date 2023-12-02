@@ -59,7 +59,7 @@
 		house: selectedHouse.name,
 		admissionDate: new Date().toISOString().slice(0, 10),
 		admissionNumber: 'PSHS/23',
-		enrollmentCode: null,
+		enrollmentCode: undefined,
 		guardian: {
 			name: undefined
 		}
@@ -277,7 +277,7 @@
 				<input
 					class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 					type="text"
-					value={formData.enrollmentCode}
+					bind:value={formData.enrollmentCode}
 					name="enrollmentCode"
 				/>
 			</Label>

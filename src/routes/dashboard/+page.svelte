@@ -1,6 +1,8 @@
 <script>
-	import { db } from '$lib/firebase';
+	import { db, storage } from '$lib/firebase';
+	import { readFileAsArrayBuffer } from '$utils/readFileAsArrayBuffer.js';
 	import { addDoc, collection, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
+	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 	import {
 		Table,
 		TableHead,
@@ -11,6 +13,7 @@
 		Checkbox,
 		Select,
 		Label,
+		Fileupload,
 		TableBodyCell,
 		TableHeadCell,
 		TableBodyRow,
@@ -33,9 +36,11 @@
 
 	console.log(data.students);
 
-	$: filteredStudents = searchName ? data.students.filter(
-		(item) => item.name.toLowerCase().indexOf(searchName.toLowerCase()) !== -1
-	) : data.students;
+	$: filteredStudents = searchName
+		? data.students.filter(
+				(item) => item.name.toLowerCase().indexOf(searchName.toLowerCase()) !== -1
+		  )
+		: data.students;
 
 	let addStudentModalOpened = false;
 	let editStudentOpened = false;
@@ -55,10 +60,10 @@
 		addStudentModalOpened = false;
 	}
 
-	async function deleteStudent(){
+	async function deleteStudent() {
 		console.log(selectedStudent);
 		let studentDoc = await getDoc(doc(db, 'students', selectedStudent.id));
-		if (studentDoc.exists()){
+		if (studentDoc.exists()) {
 			await deleteDoc(doc(db, 'students', studentDoc.id));
 		}
 
@@ -66,7 +71,30 @@
 		deleteStudentOpened = false;
 	}
 
-	async function updateStudent(){
+	async function updateStudent() {
+
+		if(typeof selectedStudent.pic != "string"){
+			if (selectedStudent.pic[0].type !== 'image/jpeg' && selectedStudent.pic[0].type !== 'image/png') {
+				error = 'Please upload a png/jpeg file only.';
+				errorModalShown = true;
+				return;
+			}
+
+			
+			let image = await readFileAsArrayBuffer(selectedStudent.pic[0]);
+			const storageRef = ref(storage, `students_pics/${Date.now() + selectedStudent.pic[0].name}`);
+			try {
+				console.log(image);
+				const uploadTask = uploadBytes(storageRef, image);
+				await uploadTask;
+			} catch (error) {
+				console.error(`Error uploading ${selectedStudent.pic[0].name} to Firebase Storage:`, error);
+				throw error(500, 'File upload failed');
+			}
+
+			selectedStudent.pic = await getDownloadURL(storageRef);
+		}
+
 		await updateDoc(doc(db, 'students', selectedStudent.id), {
 			...selectedStudent
 		});
@@ -205,17 +233,36 @@
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete Programme</h3>
 
 				<span>Are you sure you want to delete the student named "{selectedStudent.name}"</span>
-
 			</div>
 			<svelte:fragment slot="footer">
 				<Button color="red" on:click={deleteStudent}>Yeah</Button>
 				<Button color="alternative">Decline</Button>
-			  </svelte:fragment>
+			</svelte:fragment>
 		</Modal>
 
 		<Modal bind:open={editStudentOpened} size="xs" autoclose={false} class="w-full">
 			<div class="flex flex-col space-y-6" action="#">
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
+
+				<Label class="space-y-2">
+					<span>Picture</span>
+					{#if typeof selectedStudent.pic == 'string'}
+						<img src={selectedStudent.pic} alt="Student Picture" class="w-20 h-20 rounded-md" />
+					{:else}
+						<img
+							src={URL.createObjectURL(selectedStudent.pic[0])}
+							alt="Student Picture"
+							class="w-20 h-20 rounded-md"
+						/>
+					{/if}
+					<Fileupload
+						bind:files={selectedStudent.pic}
+						color={'green'}
+						name="pic"
+						required
+					/>
+				</Label>
+
 				<Label class="space-y-2">
 					<span>Full Name</span>
 					<Input
@@ -265,13 +312,25 @@
 				</Label>
 
 				<Label class="space-y-2">
-					<span>Programme</span>
+					<span>Religion</span>
 					<Input
-						bind:value={selectedStudent.programme}
+						bind:value={selectedStudent.religion}
 						color={'green'}
 						type="text"
-						name="programme"
-						placeholder="E.g. General Arts"
+						name="aggregate"
+						placeholder="E.g. xx"
+						required
+					/>
+				</Label>
+
+				<Label class="space-y-2">
+					<span>Previous JHS</span>
+					<Input
+						bind:value={selectedStudent.previousJHS}
+						color={'green'}
+						type="text"
+						name="aggregate"
+						placeholder="E.g. xx"
 						required
 					/>
 				</Label>
@@ -300,14 +359,18 @@
 					/>
 				</Label>
 
-				<Button on:click={updateStudent} color="green" type="submit" class="w-full1"
-					>Confirm</Button
+				<Button on:click={updateStudent} color="green" type="submit" class="w-full1">Confirm</Button
 				>
 			</div>
 		</Modal>
 
 		<div>
-			<input bind:value={searchName} class="rounded-md border" type="text" placeholder="Search By Name">
+			<input
+				bind:value={searchName}
+				class="rounded-md border"
+				type="text"
+				placeholder="Search By Name"
+			/>
 		</div>
 
 		<Table divClass="mt-4" hoverable={true}>
@@ -325,6 +388,7 @@
 				{#each filteredStudents as student}
 					<TableBodyRow>
 						<TableBodyCell>{student.index}</TableBodyCell>
+						<TableBodyCell>{student.enrollmentCode}</TableBodyCell>
 						<TableBodyCell>{student.name}</TableBodyCell>
 						<TableBodyCell>{student.gender}</TableBodyCell>
 						<TableBodyCell>{student.paymentCompleted ? 'Completed' : 'Pending'}</TableBodyCell>
@@ -335,7 +399,6 @@
 									selectedStudent = student;
 									selectedStudent.gender = selectedStudent.gender.toLowerCase();
 								}}
-
 								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
 							>
 						</TableBodyCell>
@@ -346,7 +409,6 @@
 									deleteStudentOpened = true;
 									selectedStudent = student;
 								}}
-
 								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
 							>
 						</TableBodyCell>
