@@ -71,16 +71,83 @@
 		deleteStudentOpened = false;
 	}
 
-	async function updateStudent() {
+	async function exportStudents() {
+		const students = data.students; // Assuming data.students is your array of student objects
 
-		if(typeof selectedStudent.pic != "string"){
-			if (selectedStudent.pic[0].type !== 'image/jpeg' && selectedStudent.pic[0].type !== 'image/png') {
+		let csvContent = '';
+
+		// Adding CSV headers
+		const headers = "index,name,gender,nationality,religion,admissionNumber,enrollmentCode,serial,track,house,programme,class,email,haveMedicalCondition,previousJHS,guardian,homeTown,schoolType,presentAddress,beceYear,admissionDate,formFilled,aggregate,pin,paymentCompleted,status,dob,paymentId,nhisNumber"
+		csvContent += (headers + '\n');
+
+		for(let i = 0; i < students.length; i++){
+			let student = students[i];
+			let row = "";
+
+			row += (student.index + ",");
+			row += (student.name + ",");
+			row += (student.gender + ",");
+			row += (student.nationality + ",");
+			row += (student.religion + ",");
+			row += (student.admissionNumber + ",");
+			row += (student.enrollmentCode + ",");
+			row += (student.serial + ",");
+			row += (student.track + ",");
+			row += (student.house + ",");
+			row += (student.programme + ",");
+			row += (student.class + ",");
+			row += (student.email + ",");
+			row += (student.haveMedicalCondition + ",");
+			row += (student.previousJHS + ",");
+			row += (student.guardian ? student.guardian.name : undefined + ",");
+			row += (student.homeTown + ",");
+			row += (student.schoolType + ",");
+			// row += (student.pic + ",");
+			row += (student.presentAddress + ",");
+			row += (student.beceYear + ",");
+			row += (student.admissionDate + ",");
+			row += (student.formFilled + ",");
+			row += (student.aggregate + ",");
+			row += (student.pin + ",");
+			row += (student.paymentCompleted + ",");
+			row += (student.status + ",");
+			row += (student.dob + ",");
+			row += (student.paymentId + ",");
+			// row += (student.admissionPdfUrl + ",");
+			row += (student.nhisNumber);
+
+			csvContent += (row + '\n');
+		}
+
+		// Create a Blob
+		const blob = new Blob([csvContent], { type: 'text/csv' });
+
+		// Create a download link
+		const link = document.createElement('a');
+		link.href = URL.createObjectURL(blob);
+		link.download = 'students.csv';
+
+		// Append the link to the document
+		document.body.appendChild(link);
+
+		// Trigger the click event to start the download
+		link.click();
+
+		// Remove the link from the document
+		document.body.removeChild(link);
+	}
+
+	async function updateStudent() {
+		if (typeof selectedStudent.pic != 'string') {
+			if (
+				selectedStudent.pic[0].type !== 'image/jpeg' &&
+				selectedStudent.pic[0].type !== 'image/png'
+			) {
 				error = 'Please upload a png/jpeg file only.';
 				errorModalShown = true;
 				return;
 			}
 
-			
 			let image = await readFileAsArrayBuffer(selectedStudent.pic[0]);
 			const storageRef = ref(storage, `students_pics/${Date.now() + selectedStudent.pic[0].name}`);
 			try {
@@ -127,12 +194,21 @@
 		</div>
 		<div class="flex flex-row justify-between mt-10">
 			<h1 class="text-xl font-semibold">Students List</h1>
-			<Button
-				on:click={() => {
-					addStudentModalOpened = true;
-				}}
-				color={'green'}>Add Student</Button
-			>
+
+			<div class="flex flex-row gap-2">
+				<Button
+					on:click={() => {
+						exportStudents();
+					}}
+					color={'green'}>Export</Button
+				>
+				<Button
+					on:click={() => {
+						addStudentModalOpened = true;
+					}}
+					color={'green'}>Add Student</Button
+				>
+			</div>
 		</div>
 
 		<Modal bind:open={addStudentModalOpened} size="xs" autoclose={false} class="w-full">
@@ -255,12 +331,7 @@
 							class="w-20 h-20 rounded-md"
 						/>
 					{/if}
-					<Fileupload
-						bind:files={selectedStudent.pic}
-						color={'green'}
-						name="pic"
-						required
-					/>
+					<Fileupload bind:files={selectedStudent.pic} color={'green'} name="pic" required />
 				</Label>
 
 				<Label class="space-y-2">

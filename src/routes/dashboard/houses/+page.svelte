@@ -1,6 +1,16 @@
 <script>
 	import { db } from '$lib/firebase';
-	import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, where } from 'firebase/firestore';
+	import {
+		addDoc,
+		collection,
+		deleteDoc,
+		doc,
+		updateDoc,
+		getDoc,
+		getDocs,
+		where,
+		query
+	} from 'firebase/firestore';
 	import {
 		Table,
 		TableHead,
@@ -48,9 +58,9 @@
 		addHouseModalOpened = false;
 	}
 
-	async function deleteHouse(){
+	async function deleteHouse() {
 		let houseDoc = await getDocs(collection(db, 'houses'), where('id', '==', selectedHouse.id));
-		if (!houseDoc.empty){
+		if (!houseDoc.empty) {
 			await deleteDoc(doc(db, 'houses', houseDoc.docs[0].id));
 		}
 
@@ -58,7 +68,7 @@
 		deleteHouseOpened = false;
 	}
 
-	async function updateHouse(){
+	async function updateHouse() {
 		await updateDoc(doc(db, 'houses', selectedHouse._id), {
 			id: selectedHouse.id,
 			name: selectedHouse.name,
@@ -68,6 +78,71 @@
 
 		selectedHouse = {};
 		editHouseOpened = false;
+	}
+
+	async function exportStudents(index) {
+		let house = data.houses[index];
+
+		let students = await getDocs(query(collection(db, 'students'), where('house', '==', house.id)));
+
+		students = students.docs;
+
+		let csvContent = '';
+
+		const headers =
+			'index,name,gender,nationality,religion,admissionNumber,enrollmentCode,serial,track,house,programme,class,email,haveMedicalCondition,previousJHS,guardian,homeTown,schoolType,presentAddress,beceYear,admissionDate,formFilled,aggregate,pin,paymentCompleted,status,dob,paymentId,nhisNumber';
+		csvContent += headers + '\n';
+
+		for (let i = 0; i < students.length; i++) {
+			let student = students[i].data();
+			let row = '';
+
+			row += student.index + ',';
+			row += student.name + ',';
+			row += student.gender + ',';
+			row += student.nationality + ',';
+			row += student.religion + ',';
+			row += student.admissionNumber + ',';
+			row += student.enrollmentCode + ',';
+			row += student.serial + ',';
+			row += student.track + ',';
+			row += student.house + ',';
+			row += student.programme + ',';
+			row += student.class + ',';
+			row += student.email + ',';
+			row += student.haveMedicalCondition + ',';
+			row += student.previousJHS + ',';
+			row += student.guardian ? student.guardian.name : undefined + ',';
+			row += student.homeTown + ',';
+			row += student.schoolType + ',';
+			// row += (student.pic + ",");
+			row += student.presentAddress + ',';
+			row += student.beceYear + ',';
+			row += student.admissionDate + ',';
+			row += student.formFilled + ',';
+			row += student.aggregate + ',';
+			row += student.pin + ',';
+			row += student.paymentCompleted + ',';
+			row += student.status + ',';
+			row += student.dob + ',';
+			row += student.paymentId + ',';
+			// row += (student.admissionPdfUrl + ",");
+			row += student.nhisNumber;
+
+			csvContent += row + '\n';
+		}
+
+		const blob = new Blob([csvContent], { type: 'text/csv' });
+
+		const link = document.createElement('a');
+		link.href = URL.createObjectURL(blob);
+		link.download = 'students.csv';
+
+		document.body.appendChild(link);
+
+		link.click();
+
+		document.body.removeChild(link);
 	}
 </script>
 
@@ -198,12 +273,11 @@
 				<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Delete House</h3>
 
 				<span>Are you sure you want to delete the house named "{selectedHouse.name}"</span>
-
 			</div>
 			<svelte:fragment slot="footer">
 				<Button color="red" on:click={deleteHouse}>Yeah</Button>
 				<Button color="alternative">Decline</Button>
-			  </svelte:fragment>
+			</svelte:fragment>
 		</Modal>
 
 		<Table divClass="mt-4" hoverable={true}>
@@ -219,7 +293,7 @@
 			</TableHead>
 
 			<TableBody tableBodyClass="divide-y">
-				{#each data.houses as student}
+				{#each data.houses as student, index}
 					<TableBodyRow>
 						<TableBodyCell>{student.id}</TableBodyCell>
 						<TableBodyCell>{student.name}</TableBodyCell>
@@ -232,7 +306,6 @@
 									editHouseOpened = true;
 									selectedHouse = student;
 								}}
-
 								class="font-medium text-green-600 hover:underline dark:text-green-500">Edit</button
 							>
 						</TableBodyCell>
@@ -243,6 +316,15 @@
 									deleteHouseOpened = true;
 								}}
 								class="font-medium text-red-600 hover:underline dark:text-green-500">Delete</button
+							>
+						</TableBodyCell>
+						<TableBodyCell>
+							<Button
+								color={'green'}
+								on:click={() => {
+									exportStudents(index);
+								}}
+								class="font-medium">Export Students</Button
 							>
 						</TableBodyCell>
 					</TableBodyRow>
