@@ -14,14 +14,28 @@
 		TableHeadCell,
 		Checkbox,
 		Radio,
-		RadioButton
+		RadioButton,
+
+		Fileupload
+
 	} from 'flowbite-svelte';
 
 	import Cookies from 'js-cookie';
 
+	import { db, storage } from '$lib/firebase';
+	import { readFileAsArrayBuffer } from '$utils/readFileAsArrayBuffer.js';
+	import { addDoc, collection, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
+	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+
 	let number = '';
 
 	export let data;
+
+	let error;
+
+	data.student.gender = data.student.gender.toLowerCase();
+
+	let editStudentOpened = false;
 	
 
 	async function makeAdmissionLetter(){
@@ -57,7 +71,164 @@
 			window.open(response.link, '_blank')
 		}
 	}
+
+	async function updateStudent() {
+		console.log(data.student);
+
+		if (typeof data.student.pic != 'string') {
+			if (
+				data.student.pic[0].type !== 'image/jpeg' &&
+				data.student.pic[0].type !== 'image/png'
+			) {
+				error = 'Please upload a png/jpeg file only.';
+				errorModalShown = true;
+				return;
+			}
+
+			let image = await readFileAsArrayBuffer(data.student.pic[0]);
+			const storageRef = ref(storage, `students_pics/${Date.now() + data.student.pic[0].name}`);
+			try {
+				console.log(image);
+				const uploadTask = uploadBytes(storageRef, image);
+				await uploadTask;
+			} catch (error) {
+				console.error(`Error uploading ${data.student.pic[0].name} to Firebase Storage:`, error);
+				throw error(500, 'File upload failed');
+			}
+
+			data.student.pic = await getDownloadURL(storageRef);
+		}
+
+		console.log("Updating Student..")
+
+		await updateDoc(doc(db, 'students', data.student.id), {
+			...data.student
+		});
+
+		console.log("Updated Successfully..")
+
+		editStudentOpened = false;
+	}
 </script>
+
+<Modal bind:open={editStudentOpened} size="xs" autoclose={false} class="w-full">
+	<div class="flex flex-col space-y-6" action="#">
+		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
+
+		<Label class="space-y-2">
+			<span>Picture</span>
+			{#if typeof data.student.pic == 'string'}
+				<img src={data.student.pic} alt="Student Picture" class="w-20 h-20 rounded-md" />
+			{:else}
+				<img
+					src={URL.createObjectURL(data.student.pic[0])}
+					alt="Student Picture"
+					class="w-20 h-20 rounded-md"
+				/>
+			{/if}
+			<Fileupload bind:files={data.student.pic} color={'green'} name="pic" required />
+		</Label>
+
+		<Label class="space-y-2">
+			<span>Full Name</span>
+			<Input
+				bind:value={data.student.name}
+				color={'green'}
+				type="text"
+				name="name"
+				placeholder="E.g. Ama Serwaa"
+				required
+			/>
+		</Label>
+		<Label class="space-y-2">
+			<span>Gender</span>
+			<Select
+				bind:value={data.student.gender}
+				defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+				items={[
+					{ value: 'male', name: 'Male' },
+					{ value: 'female', name: 'Female' },
+					{ value: 'other', name: 'Other' }
+				]}
+			/>
+		</Label>
+
+		<!-- <Label class="space-y-2">
+			<span>Index Number</span>
+			<Input
+				bind:value={data.student.index}
+				color={'green'}
+				type="text"
+				name="Index Number"
+				placeholder="E.g. xxxxxxxxxx23"
+				required
+			/>
+		</Label> -->
+
+		<Label class="space-y-2">
+			<span>Aggregate</span>
+			<Input
+				bind:value={data.student.aggregate}
+				color={'green'}
+				type="text"
+				name="aggregate"
+				placeholder="E.g. xx"
+				required
+			/>
+		</Label>
+
+		<Label class="space-y-2">
+			<span>Religion</span>
+			<Input
+				bind:value={data.student.religion}
+				color={'green'}
+				type="text"
+				name="aggregate"
+				placeholder="E.g. xx"
+				required
+			/>
+		</Label>
+
+		<Label class="space-y-2">
+			<span>Previous JHS</span>
+			<Input
+				bind:value={data.student.previousJHS}
+				color={'green'}
+				type="text"
+				name="aggregate"
+				placeholder="E.g. xx"
+				required
+			/>
+		</Label>
+
+		<Label class="space-y-2">
+			<span>Track</span>
+			<Input
+				bind:value={data.student.track}
+				color={'green'}
+				type="text"
+				name="track"
+				placeholder="E.g. Single"
+				required
+			/>
+		</Label>
+
+		<Label class="space-y-2">
+			<span>Status</span>
+			<Input
+				bind:value={data.student.status}
+				color={'green'}
+				type="text"
+				name="status"
+				placeholder="E.g. Day"
+				required
+			/>
+		</Label>
+
+		<Button on:click={updateStudent} color="green" type="submit" class="w-full1">Confirm</Button
+		>
+	</div>
+</Modal>
 
 <div class="bg-background text-white flex flex-col min-h-[100vh] py-4 items-center justify-center">
 	<div class="flex flex-col min-h-[50vh] lg:min-h-[50vh] p-8 rounded-md bg-muted-background">
@@ -220,6 +391,15 @@
 				class="w-3/5 whitespace-nowrap"
 				color="green">Prospectus</Button
 			>
+
+			<Button
+				on:click={() => {
+					editStudentOpened = true;
+				}}
+				class="w-3/5 whitespace-nowrap"
+				color="green">Edit</Button
+			>
+
 			<Button
 				on:click={() => {
 					Cookies.remove("pin");
