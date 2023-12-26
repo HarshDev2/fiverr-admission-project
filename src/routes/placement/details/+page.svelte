@@ -115,44 +115,6 @@
 	<div class="flex flex-col space-y-6" action="#">
 		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Student</h3>
 
-		<Label class="space-y-2">
-			<span>Picture</span>
-			{#if typeof data.student.pic == 'string'}
-				<img src={data.student.pic} alt="Student Picture" class="w-20 h-20 rounded-md" />
-			{:else}
-				<img
-					src={URL.createObjectURL(data.student.pic[0])}
-					alt="Student Picture"
-					class="w-20 h-20 rounded-md"
-				/>
-			{/if}
-			<Fileupload bind:files={data.student.pic} color={'green'} name="pic" required />
-		</Label>
-
-		<Label class="space-y-2">
-			<span>Full Name</span>
-			<Input
-				bind:value={data.student.name}
-				color={'green'}
-				type="text"
-				name="name"
-				placeholder="E.g. Ama Serwaa"
-				required
-			/>
-		</Label>
-		<Label class="space-y-2">
-			<span>Gender</span>
-			<Select
-				bind:value={data.student.gender}
-				defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
-				items={[
-					{ value: 'male', name: 'Male' },
-					{ value: 'female', name: 'Female' },
-					{ value: 'other', name: 'Other' }
-				]}
-			/>
-		</Label>
-
 		<!-- <Label class="space-y-2">
 			<span>Index Number</span>
 			<Input
@@ -165,10 +127,111 @@
 			/>
 		</Label> -->
 
+		<Label class="space-y-2 flex flex-col gap-2">
+			NHIS No.*
+			<input
+				class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+				type="text"
+				bind:value={data.student.nhisNumber}
+				name="nhisNumber"
+			/>
+		</Label>
+
+		<Label class="space-y-2 flex flex-col gap-2">
+			BECE Year*
+			<Select
+				bind:value={data.student.beceYear}
+				defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+				items={[
+					{ value: 2030, name: '2030' },
+					{
+						value: 2029,
+						name: '2029'
+					},
+					{
+						value: 2028,
+						name: '2028'
+					},
+					{
+						value: 2027,
+						name: '2027'
+					},
+					{
+						value: 2026,
+						name: '2026'
+					},
+					{
+						value: 2025,
+						name: '2025'
+					},
+					{
+						value: 2024,
+						name: '2024'
+					},
+					{
+						value: 2023,
+						name: '2023'
+					},
+					{
+						value: 2022,
+						name: '2022'
+					},
+					{
+						value: 2021,
+						name: '2021'
+					},
+					{
+						value: 2020,
+						name: '2020'
+					},
+					{
+						value: 2019,
+						name: '2019'
+					},
+					{
+						value: 2018,
+						name: '2018'
+					},
+					{
+						value: 2017,
+						name: '2017'
+					},
+					{
+						value: 2016,
+						name: '2016'
+					},
+					{
+						value: 2015,
+						name: '2015'
+					},
+					{
+						value: 2014,
+						name: '2014'
+					},
+					{
+						value: 2013,
+						name: '2013'
+					},
+					{
+						value: 2012,
+						name: '2012'
+					},
+					{
+						value: 2011,
+						name: '2011'
+					},
+					{
+						value: 2010,
+						name: '2010'
+					}
+				]}
+			/>
+		</Label>
+
 		<Label class="space-y-2">
-			<span>Aggregate</span>
+			<span>Nationality</span>
 			<Input
-				bind:value={data.student.aggregate}
+				bind:value={data.student.nationality}
 				color={'green'}
 				type="text"
 				name="aggregate"
@@ -201,27 +264,74 @@
 			/>
 		</Label>
 
-		<Label class="space-y-2">
-			<span>Track</span>
-			<Input
-				bind:value={data.student.track}
-				color={'green'}
-				type="text"
-				name="track"
-				placeholder="E.g. Single"
-				required
+		<Label class="space-y-2 flex flex-col gap-2">
+			Previous School Type*
+			<Select
+				defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+				items={[
+					{ value: 'public', name: 'Public' },
+					{ value: 'private', name: 'Private' }
+				]}
+				bind:value={data.student.schoolType}
 			/>
 		</Label>
 
-		<Label class="space-y-2">
-			<span>Status</span>
+		<!-- Guardian's Name -->
+		<Label class="space-y-2 flex flex-col gap-2">
+			Guardian's Name*
 			<Input
-				bind:value={data.student.status}
-				color={'green'}
+				bind:value={data.student.guardian.name}
+				class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+				name="guardianName"
+			/>
+		</Label>
+
+		<!-- Relation -->
+
+		<Label class="space-y-2 flex flex-col gap-2">
+			Relation*
+			<Select
+				bind:value={data.student.guardian.relation}
+				defaultClass="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 "
+				items={[
+					{ value: 'father', name: 'Father' },
+					{ value: 'mother', name: 'Mother' },
+					{ value: 'other', name: 'Others' }
+				]}
+			/>
+		</Label>
+
+		<!-- Occupation -->
+
+		<Label class="space-y-2 flex flex-col gap-2">
+			Occupation*
+			<Input
+				bind:value={data.student.guardian.occupation}
+				class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
 				type="text"
-				name="status"
-				placeholder="E.g. Day"
-				required
+				name="occupation"
+			/>
+		</Label>
+
+		<!-- Number -->
+		<Label class="space-y-2 flex flex-col gap-2">
+			Phone Number*
+			<Input
+				class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+				type="number"
+				name="number"
+				bind:value={data.student.guardian.phoneNumber}
+			/>
+		</Label>
+
+		<!-- Email -->
+		<Label class="space-y-2 flex flex-col gap-2">
+			Guardian's Email
+			<input
+				class="text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+				type="email"
+				bind:value={data.student.guardian.email}
+				name="email"
 			/>
 		</Label>
 
