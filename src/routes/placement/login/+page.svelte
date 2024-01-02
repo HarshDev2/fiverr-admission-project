@@ -68,12 +68,26 @@
 
 	let index = '';
 
+	let studentInfo = {};
+
+	async function viewPinAndSerial() {
+		let studentDocs = await getDocs(
+			query(collection(db, 'students'), where('index', '==', index.toString()))
+		);
+
+		if (!studentDocs.empty) {
+			let student = studentDocs.docs[0].data();
+
+			studentInfo = student;
+		}
+	}
+
 	async function sendPinAndSerial() {
 		let studentDocs = await getDocs(
 			query(collection(db, 'students'), where('index', '==', index.toString()))
 		);
 
-		console.log(studentDocs.docs.length)
+		console.log(studentDocs.docs.length);
 
 		if (!studentDocs.empty) {
 			let student = studentDocs.docs[0].data();
@@ -141,29 +155,43 @@
 			<div class="mt-6 w-full flex flex-col items-center gap-2">
 				<Button
 					on:click={() => {
-						restorePopupOpen = true;
-					}}
-					class="w-3/5"
-					color="green">Restore Pin/Serial</Button
-				>
-
-				<Button
-					on:click={() => {
 						checkDetails();
 					}}
 					class="w-3/5"
 					color="green">Login</Button
 				>
+				<Button
+					on:click={() => {
+						restorePopupOpen = true;
+					}}
+					class="w-3/5"
+					color="green">Restore Pin/Serial</Button
+				>
 			</div>
 		{/if}
 
-		<Modal title="Provide Index Number" bind:open={restorePopupOpen} size="sm" autoclose>
-			<div class="text-base leading-relaxed">
-				<span>Enter the index number.</span>
-				<Input bind:value={index} color={'green'} />
-			</div>
+		<Modal title="Provide Index Number" bind:open={restorePopupOpen} size="sm" autoclose={false}>
+			{#if !studentInfo.pin || !studentInfo.serial}
+				<div class="text-base leading-relaxed">
+					<span>Enter the index number.</span>
+					<Input bind:value={index} color={'green'} />
+				</div>
+			{/if}
+
+			{#if studentInfo.pin && studentInfo.serial}
+				<div class="text-base leading-relaxed">
+					<span>Serial: {studentInfo.serial}</span>
+					<span>Pin: {studentInfo.pin}</span>
+				</div>
+			{/if}
+
 			<svelte:fragment slot="footer">
-				<Button on:click={() => sendPinAndSerial()} color="green">Confirm</Button>
+				{#if !studentInfo.pin || !studentInfo.serial}
+					<Button on:click={() => viewPinAndSerial()} color="green">View</Button>
+					<Button on:click={() => sendPinAndSerial()} color="green">Send</Button>
+				{:else}
+					<Button on:click={() => (studentInfo = {})} color="green">Back</Button>
+				{/if}
 			</svelte:fragment>
 		</Modal>
 
@@ -225,9 +253,7 @@
 			<Button on:click={handlePayment} class="w-fit mt-2 ml-2" color="green"
 				>Buy Admission Voucher</Button
 			>
-			<Button class="w-fit mt-2 ml-2" color="green"
-				>Login</Button
-			>
+			<Button class="w-fit mt-2 ml-2" color="green">Login</Button>
 		{/if}
 	</div>
 </div>
